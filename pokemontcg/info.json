@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Andeh#0001",
+    "INSTALL_MSG" : "You're about to install this.",
+    "NAME" : "pokemontcg",
+    "SHORT" : "A pokemon TCG thing.",
+    "DESCRIPTION" : "Gives card info for pokemon cards.",
+    "TAGS" : ["pokemon", "cards", "tcg"],
+    "REQUIREMENTS" : ["tabulate", "Pillow"],
+    "HIDDEN" : false
+}

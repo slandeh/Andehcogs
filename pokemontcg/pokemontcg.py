@@ -407,4 +407,4 @@ def text(name, card_set_text):
 		return_str += " (Legacy)"
 
 	return_str += "```\n"
-return return_str
+return return_str()

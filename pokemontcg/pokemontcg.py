@@ -106,7 +106,7 @@ def main():
 	client.run(token)
 
 if __name__ == '__main__':
-main()
+	main()
 
 # Conversion from type name to emoji
 emoji = {

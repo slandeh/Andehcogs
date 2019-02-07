@@ -5,6 +5,6 @@
     "SHORT" : "A pokemon TCG thing.",
     "DESCRIPTION" : "Gives card info for pokemon cards.",
     "TAGS" : ["pokemon", "cards", "tcg"],
-    "REQUIREMENTS" : ["tabulate", "Pillow"],
+    "REQUIREMENTS" : ["pokemontcgsdk"],
     "HIDDEN" : false
 }

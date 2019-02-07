@@ -15,18 +15,18 @@ MAX_LINES = 15
 
 # Conversion from type name to emoji
 emoji = {
-    'Colorless' : '<:ecolorless:362734594593914890>',
-    'Darkness'  : '<:edarkness:362733180274606080>',
-    'Dragon'    : '<:edragon:362737396179271680>',
-    'Fairy'     : '<:efairy:362733851371503616>',
-    'Fighting'  : '<:efighting:362732793995984917>',
-    'Fire'      : '<:efire:362731242044653578>',
-    'Free'      : '<:ecolorless:362734594593914890>',
-    'Grass'     : '<:egrass:362730672680599552>',
-    'Lightning' : '<:elightning:362731984474079233>',
-    'Psychic'   : '<:epsychic:362732305359568908>',
-    'Metal'     : '<:emetal:362733507539369984>',
-    'Water'     : '<:ewater:362731629988544512>',
+    'Colorless' : '<:ecolorless:543156672219054100>',
+    'Darkness'  : '<:edarkness:543156641772732438>',
+    'Dragon'    : '<:edragon:543156672059670541>',
+    'Fairy'     : '<:efairy:543156671824789504>',
+    'Fighting'  : '<:efighting:543156617579986995>',
+    'Fire'      : '<:efire:543156506485587968>',
+    'Free'      : '<:ecolorless:543156672219054100>',
+    'Grass'     : '<:egrass:543154867540066307>',
+    'Lightning' : '<:elightning:543156557072957441>',
+    'Psychic'   : '<:epsychic:543156587100110851>',
+    'Metal'     : '<:emetal:543156671648628768>',
+    'Water'     : '<:ewater:543156529956651008>',
 }
 
 # Conversion from type name to hex colour

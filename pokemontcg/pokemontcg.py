@@ -81,7 +81,7 @@ def search(name):
         cards.extend(Card.where(name = name.lower().replace(" gx", "-gx")))
     # Delta card text replacement
     elif name.lower().endswith(" delta"):
-        cards.extend(Card.where(name = name.lower().replace(" δ")))
+        cards.extend(Card.where(name = name.lower().replace(" delta", " δ")))
     # Otherwise, search for the given text
     else:
         cards = Card.where(name = name)

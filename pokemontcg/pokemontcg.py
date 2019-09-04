@@ -88,13 +88,7 @@ def search(name):
         
     # Fix for entering one letter to search for a card
     if len(name) == 1 and name == "N":
-        return ("Matches for search '%s'\n" % name
-                "N - Noble Victories 92/101 (`bw3-92`)\n
-                N - Noble Victories 101/101 (`bw3-101`)\n
-                N - Dark Explorers 96/108 (`bw5-96`)\n
-                N - BW Black Star Promo 100 (`bwp-100`)\n
-                N - Fates Collide 105/124 (`xy10-105`)\n
-                N - Fates Collide 105a/124 (`xy10-105a`)")
+        return ("Matches for search '%s':\nN - Noble Victories 92/101 (`bw3-92`)\nN - Noble Victories 101/101 (`bw3-101`)\nN - Dark Explorers 96/108 (`bw5-96`)\nN - BW Black Star Promo 100 (`bwp-100`)\nN - Fates Collide 105/124 (`xy10-105`)\nN - Fates Collide 105a/124 (`xy10-105a`)" % name)
     elif len(name) == 1:
         return ("Only one letter was entered! The list will take too long!")
 

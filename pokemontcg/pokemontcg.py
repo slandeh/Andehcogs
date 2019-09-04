@@ -21,7 +21,7 @@ emoji = {
     'Fairy'     : '<:efairy:543156671824789504>',
     'Fighting'  : '<:efighting:543156617579986995>',
     'Fire'      : '<:efire:543156506485587968>',
-    'Free'      : '<:ecolorless:543156672219054100>',
+    'Free'      : '<:efree:618879505007902750>',
     'Grass'     : '<:egrass:543154867540066307>',
     'Lightning' : '<:elightning:543156557072957441>',
     'Psychic'   : '<:epsychic:543156587100110851>',

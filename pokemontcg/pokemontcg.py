@@ -1,11 +1,15 @@
-from redbot.core import commands
+# Discord
+import discord
+
+# Third-Party
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 
-import discord
-from discord.ext import commands
-from .utils.chat_formatting import pagify
+# Redbot
+from redbot.core import commands
+from redbot.core.utils.chat_formatting import pagify
 
+# PokemonTCG SDK
 from pokemontcgsdk import Card
 from pokemontcgsdk import Set
 

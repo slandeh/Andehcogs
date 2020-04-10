@@ -412,7 +412,3 @@ class PokemonTCG(commands.Cog):
         """
         message = await self._run_in_thread(text, name, set_text)
         await self._smart_send(ctx.message.channel, message)
-
-
-def setup(bot):
-    bot.add_cog(PokemonTCG(bot))

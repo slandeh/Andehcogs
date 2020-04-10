@@ -345,7 +345,7 @@ def text(name, card_set_text):
     return return_str
 
 
-class PokemonTCG:
+class PokemonTCG(command.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.executor = ThreadPoolExecutor()
@@ -378,7 +378,7 @@ class PokemonTCG:
         (message, results) = await self._run_in_thread(search, card_name)
 
         if results > MAX_LINES:
-            await self.bot.say("Results list is too long, messaging instead")
+            await ctx.send("Results list is too long, messaging instead")
             destination = ctx.message.author
         else:
             destination = ctx.message.channel

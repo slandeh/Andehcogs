@@ -1,4 +1,4 @@
-from .pokemontcg import pokemontcg
+from .pokemontcg import PokemonTCG
 
 def setup(bot):
   bot.add_cog(pokemontcg())

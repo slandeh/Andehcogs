@@ -358,10 +358,10 @@ class PokemonTCG(commands.Cog):
 
     async def _smart_send(self, destination, message):
         if isinstance(message, discord.Embed):
-            await self.bot.send_message(destination, embed=message)
+            await destination.send(embed=message)
         elif message:
             for page in pagify(message):
-                await self.bot.send_message(destination, page)
+                await destination.send(page)
 
     @commands.command(pass_context=True)
     async def card(self, ctx, *, card_name: str):

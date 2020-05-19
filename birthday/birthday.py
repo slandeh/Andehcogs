@@ -6,8 +6,7 @@ import datetime
 import itertools
 import contextlib
 
-from .utils import checks
-from .utils.dataIO import dataIO
+from redbot.core import Config
 
 
 class Birthdays:

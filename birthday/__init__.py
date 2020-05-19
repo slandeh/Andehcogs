@@ -1,4 +1,4 @@
-from .Birthdays import birthday
+from .birthday import Birthdays
 
 def setup(bot):
-    bot.add_cog(birthday())
+    bot.add_cog(Birthdays())

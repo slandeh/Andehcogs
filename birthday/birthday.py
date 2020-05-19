@@ -231,10 +231,3 @@ class Birthdays:
 
     def save_data(self):
         dataIO.save_json(self.CONFIG_FILE_PATH, self.config)
-
-
-def setup(bot):
-    # Creating the cog
-    cog = Birthdays(bot)
-    # Finally, add the cog to the bot.
-    bot.add_cog(cog)

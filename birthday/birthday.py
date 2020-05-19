@@ -6,7 +6,6 @@ import datetime
 import itertools
 import contextlib
 
-from discord.ext import commands
 from .utils import checks
 from .utils.dataIO import dataIO
 

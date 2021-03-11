@@ -87,15 +87,15 @@ def search(name):
     elif name.lower().endswith(" delta"):
         cards.extend(Card.where(name = name.lower().replace(" delta", " δ")))
     # Handling "N"
-    elif name.lower() == "n":
-        await message.channel.send("Matches for search 'N'")
-        await message.channel.send("N - Noble Victories 92/101 (`bw3-92`)")
-        await message.channel.send("N - Noble Victories 101/101 (`bw3-101`)")
-        await message.channel.send("N - Dark Explorers 96/108 (`bw5-96`)")
-        await message.channel.send("N - BW Black Star Promos BW100 (`bwp-BW100`)")
-        await message.channel.send("N - Fates Collide 105/124 (`xy10-105`)")
-        await message.channel.send("N - Fates Collide 105a/124 (`xy10-105a`)")
-        return
+    # elif name.lower() == "n":
+    #     await message.channel.send("Matches for search 'N'")
+    #     await message.channel.send("N - Noble Victories 92/101 (`bw3-92`)")
+    #     await message.channel.send("N - Noble Victories 101/101 (`bw3-101`)")
+    #     await message.channel.send("N - Dark Explorers 96/108 (`bw5-96`)")
+    #     await message.channel.send("N - BW Black Star Promos BW100 (`bwp-BW100`)")
+    #     await message.channel.send("N - Fates Collide 105/124 (`xy10-105`)")
+    #     await message.channel.send("N - Fates Collide 105a/124 (`xy10-105a`)")
+    #     return
     # Otherwise, search for the given text
     else:
         cards = Card.where(name = name)

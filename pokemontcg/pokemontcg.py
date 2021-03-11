@@ -87,14 +87,14 @@ def search(name):
     elif name.lower().endswith(" delta"):
         cards.extend(Card.where(name = name.lower().replace(" delta", " δ")))
     # Handling "N"
-    elif name.lower() == "n":
-        return ("Matches for search 'N'"\n)
-        return ("N - Noble Victories 92/101 (`bw3-92`)"\n)
-        return ("N - Noble Victories 101/101 (`bw3-101`)"\n)
-        return ("N - Dark Explorers 96/108 (`bw5-96`)"\n)
-        return ("N - BW Black Star Promos BW100 (`bwp-BW100`)"\n)
-        return ("N - Fates Collide 105/124 (`xy10-105`)"\n)
-        return ("N - Fates Collide 105a/124 (`xy10-105a`)")
+    elif name.upper() == "N":
+        return ("Matches for search 'N'"\n, 0)
+        return ("'%s' - Noble Victories 92/101 (`bw3-92`)"\n, % name, 0)
+        return ("'%s' - Noble Victories 101/101 (`bw3-101`)"\n, % name, 0)
+        return ("'%s' - Dark Explorers 96/108 (`bw5-96`)"\n, % name, 0)
+        return ("'%s' - BW Black Star Promos BW100 (`bwp-BW100`)"\n, % name, 0)
+        return ("'%s' - Fates Collide 105/124 (`xy10-105`)"\n, % name, 0)
+        return ("'%s' - Fates Collide 105a/124 (`xy10-105a`)", % name, 0)
     # Otherwise, search for the given text
     else:
         cards = Card.where(name = name)

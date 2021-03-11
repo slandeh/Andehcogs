@@ -87,7 +87,7 @@ def search(name):
     elif name.lower().endswith(" delta"):
         cards.extend(Card.where(name = name.lower().replace(" delta", " δ")))
     # Handling "N"
-    elif name.lower().matches("n"):
+    elif name.lower() == "n":
         return ("Matches for search 'N'\n"
                 "N - Noble Victories 92/101 (`bw3-92`)\n"
                 "N - Noble Victories 101/101 (`bw3-101`)\n"

@@ -1,5 +1,5 @@
 {
-    "author" : "Andeh#0001",
+    "author" : ["Andeh#0001"],
     "install_msg" : "You're about to install this.",
     "name" : "pokemontcgV2",
     "short" : "A pokemon TCG thing.",

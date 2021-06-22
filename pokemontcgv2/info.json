@@ -1,10 +1,10 @@
 {
-    "AUTHOR" : "Andeh#0001",
-    "INSTALL_MSG" : "You're about to install this.",
-    "NAME" : "pokemontcgV2",
-    "SHORT" : "A pokemon TCG thing.",
-    "DESCRIPTION" : "Gives card info for pokemon cards.",
-    "TAGS" : ["pokemon", "cards", "tcg"],
-    "REQUIREMENTS" : ["pokemontcgsdk"],
-    "HIDDEN" : false
+    "author" : "Andeh#0001",
+    "install_msg" : "You're about to install this.",
+    "name" : "pokemontcgV2",
+    "short" : "A pokemon TCG thing.",
+    "description" : "Gives card info for pokemon cards.",
+    "tags" : ["pokemon", "cards", "tcg"],
+    "requirements" : ["pokemontcgsdk"],
+    "hidden" : false
 }

@@ -178,7 +178,7 @@ def pokemon_embed(card):
     desc = "%s Pokémon" % card.subtypes[0]
     if card.evolvesFrom is not None and card.evolvesFrom != "":
         desc += " (Evolves from %s)" % card.evolvesFrom
-    if card.subtypes > 1:
+    if len(card.subtypes) > 1:
         desc += "\n%s" % card.subtypes[1]
 
     embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc)
@@ -320,7 +320,7 @@ def text(name, card_set_text):
         return_str += "%s Pokemon" % card.subtypes
         if card.evolvesFrom is not None and card.evolvesFrom != "":
             return_str += " (Evolves from %s)" % card.evolvesFrom
-        if card.subtypes > 1:
+        if len(card.subtypes) > 1:
             return_str += "%s" % card.subtypes[1]
 
         return_str += "\n\n"

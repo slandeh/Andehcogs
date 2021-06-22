@@ -326,7 +326,7 @@ def text(name, card_set_text):
         return_str += "\n\n"
         
         # Ancient Traits
-        if card.ancientTraid is not None:
+        if card.ancientTrait is not None:
             return_str += "Ancient Trait: %s\n" % card.ancientTrait.name
             return_str += "%s\n" % card.ancientTrait.text
             return_str += "\n"

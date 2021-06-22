@@ -399,7 +399,7 @@ def text(name, card_set_text):
     return return_str
 
 
-class PokemonTCG(commands.Cog):
+class PokemonTCGv2(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.executor = ThreadPoolExecutor()

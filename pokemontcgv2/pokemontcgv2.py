@@ -143,20 +143,20 @@ def embed_create(card, card_set):
     embed.set_image(url=card.images.large)
 
     # Set and legality
-    text = "%s - %s/%s " % (card_set.name, card.number, card_set.printedTotal)
+    text = "%s - %s/%s\n " % (card_set.name, card.number, card_set.printedTotal)
 
     if card_set.legalities.standard == 'Legal':
-        text += " \u2705 (Standard)"
+        text += "\u2705 (Standard) - "
     elif card_set.legalities.standard == 'Banned':
-        text += " \u274C (Standard)"
+        text += "\u274C (Standard) - "
     if card_set.legalities.expanded == 'Legal':
-        text += " \u2705 (Expanded)"
+        text += "\u2705 (Expanded) - "
     elif card_set.legalities.expanded == 'Banned':
-        text += " \u274C (Expanded)"
+        text += "\u274C (Expanded) - "
     if card_set.legalities.expanded == 'Legal':
-        text += " \u2705 (Legacy)"
+        text += "\u2705 (Legacy)"
     elif card_set.legalities.legacy == 'Banned':
-        text += " \u274C (Legacy)"
+        text += "\u274C (Legacy)"
 
     embed.set_footer(text=text, icon_url=card_set.images.symbol)
 
@@ -300,7 +300,7 @@ def show(name, card_set_text):
 # Given a card name and set code, return the card text as plain text
 def text(name, card_set_text):
     card = parse_card(name, card_set_text)
-    card_set = Set.find(card.set_code)
+    card_set = Set.find(card.set.id)
 
     # Create a string for the card text
     return_str = "```\n"

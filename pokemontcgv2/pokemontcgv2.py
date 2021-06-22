@@ -219,7 +219,8 @@ def pokemon_embed(card):
 
     # Weakness, resistance, retreat
     name = ""
-
+    desc = ""
+    
     if card.weaknesses is not None:
         name += "Weakness: "
         for weakness in card.weaknesses:
@@ -234,17 +235,13 @@ def pokemon_embed(card):
     if card.retreatCost is not None:
         name += " - Retreat: "
         name += "%s" % emoji['Colorless'] * len(card.retreatCost)
-
-    if name != "":
-        embed.add_field(name=name, value='\u200b', inline=False)
-    
-    # Rulebox
-    desc = ""
+    # Ruleboxes
     
     if card.rules is not None:
         for rule in card.rules:
             desc += "%s\n" % rule
-        embed.add_field(name='\u200b', value=desc, inline=False)
+
+    embed.add_field(name=name, value=desc, inline=False)
 
     return embed
 

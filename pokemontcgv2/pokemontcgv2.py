@@ -96,7 +96,7 @@ def search(name):
         return (return_str, 6)
     # Otherwise, search for the given text
     else:
-        cards = Card.where(name = name)
+        cards = Card.where(q='card:%s' % name)
     
     # Give an error if there are no matches
     if len(cards) == 0:
@@ -125,9 +125,9 @@ def search(name):
     # Create the returned string
     return_str = "Matches for search '%s'\n" % name
     for card in cards_with_sets:
-        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.name,
-                                                      card.number, card.totalPrinted,
-                                                      card.set.id, card.number))
+        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card[0].name, card[1].series,
+                                                      card[0].number, card[1].printedTotal,
+                                                      card[0].set.id, card[0].number))
 
     return (return_str, len(cards_with_sets))
 
@@ -375,7 +375,7 @@ def text(name, card_set_text):
     elif card.supertype == "Trainer" or card.supertype == "Energy":
         return_str += "%s\n" % card.name
         return_str += "%s\n\n" % card.subtypes
-        return_str += "%s\n" % "\n\n".join(card.text)
+        return_str += "%s\n" % "\n\n".join(card.rules)
 
     # Finally, get the set and legality info
     return_str += "\n\n%s - %s/%s" % (card_set.name, card.number, card_set.printedTotal)

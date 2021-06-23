@@ -96,7 +96,7 @@ def search(name):
         return (return_str, 6)
     # Otherwise, search for the given text
     else:
-        cards = Card.where(q='card:%s' % name)
+        cards = Card.where(q=f'name:"{name}"', orderBy="set.releaseDate")
     
     # Give an error if there are no matches
     if len(cards) == 0:
@@ -107,29 +107,14 @@ def search(name):
     if len(cards) == 1:
         return (show(cards[0].name, cards[0].set.id), 1)
 
-    # If there are matches, build a string with the name, set and set code
-    # of every match
-    cards_with_sets = []
-    for card in cards:
-        card_set = Set.find(card.set.id)
-
-        # Re-arrange the release data so it is ISO
-        date_split = card_set.releaseDate.split("/")
-        card_set.releaseDate = "%s-%s-%s" % (date_split[2], date_split[0], date_split[1])
-
-        cards_with_sets.append((card, card_set))
-
-    # Sort the list of cards by set release date
-    cards_with_sets.sort(key = lambda card : card[1].releaseDate)
-
     # Create the returned string
     return_str = "Matches for search '%s'\n" % name
-    for card in cards_with_sets:
-        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card[0].name, card[1].series,
-                                                      card[0].number, card[1].printedTotal,
-                                                      card[0].set.id, card[0].number))
+    for card in cards:
+        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.series,
+                                                      card.number, card.set.printedTotal,
+                                                      card.set.id, card.number))
 
-    return (return_str, len(cards_with_sets))
+    return (return_str, len(cards))
 
 
 def embed_create(card, card_set):

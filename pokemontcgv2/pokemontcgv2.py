@@ -60,6 +60,13 @@ short_energy = {
     'Water'     : "[W]",
 }
 
+# Getting price values
+def valueSearch(value):
+    if not value:
+        return '- N/A -'
+    
+    return f'{value:,.2f}'
+
 
 # Given a string, searches for cards by name using the given string. Return a
 # list of matches sorted by release, and the set name and code the card was
@@ -155,80 +162,55 @@ def price_embed(card, card_set):
     
     # Get the name of the card for the title
     title = card.name
-    desc = "Prices provided by TCGPlayer. Prices last updated: %s" % card.tcgplayer.updatedAt
+    desc = "Prices provided by TCGPlayer. Last updated: %s" % card.tcgplayer.updatedAt
     
     embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc, url=card.tcgplayer.url)
     embed.set_thumbnail(url=card.images.small)
     
     normalPrices = prices.normal
-    if normalPrices is not None:
-        market = "${:,.2f}".format(normalPrices.market)
-        directLow = "${:,.2f}".format(normalPrices.directLow)
-        low = "${:,.2f}".format(normalPrices.low)
-        mid = "${:,.2f}".format(normalPrices.mid)
-        high = "${:,.2f}".format(normalPrices.high)
-        
-        embed.add_field(name="LOW", value=low, inline=True)
-        embed.add_field(name="MID", value=mid, inline=True)
-        embed.add_field(name="HIGH", value=high, inline=True)
-        embed.add_field(name="MARKET", value=market, inline=True)
-        embed.add_field(name="DIRECT LOW", value=directLow, inline=True)
+    if normalPrices:
+        embed.add_field(name=' -- Normal Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(normalPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(normalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(normalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(normalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(normalPrices.directLow), inline=True)
 
     holofoilPrices = prices.holofoil    
-    if holofoilPrices is not None:
-        market = "${:,.2f}".format(holofoilPrices.market)
-        directLow = "${:,.2f}".format(holofoilPrices.directLow)
-        low = "${:,.2f}".format(holofoilPrices.low)
-        mid = "${:,.2f}".format(holofoilPrices.mid)
-        high = "${:,.2f}".format(holofoilPrices.high)
-        
-        embed.add_field(name="LOW", value=low, inline=True)
-        embed.add_field(name="MID", value=mid, inline=True)
-        embed.add_field(name="HIGH", value=high, inline=True)
-        embed.add_field(name="MARKET", value=market, inline=True)
-        embed.add_field(name="DIRECT LOW", value=directLow, inline=True)
+    if holofoilPrices:
+        embed.add_field(name=' -- Holofoil Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(holofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(holofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(holofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(holofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(holofoilPrices.directLow), inline=True)
 
     reverseHolofoilPrices = prices.reverseHolofoil    
-    if reverseHolofoilPrices is not None:
-        market = "${:,.2f}".format(reverseHolofoilPrices.market)
-        directLow = "${:,.2f}".format(reverseHolofoilPrices.directLow)
-        low = "${:,.2f}".format(reverseHolofoilPrices.low)
-        mid = "${:,.2f}".format(reverseHolofoilPrices.mid)
-        high = "${:,.2f}".format(reverseHolofoilPrices.high)
-        
-        embed.add_field(name="LOW", value=low, inline=True)
-        embed.add_field(name="MID", value=mid, inline=True)
-        embed.add_field(name="HIGH", value=high, inline=True)
-        embed.add_field(name="MARKET", value=market, inline=True)
-        embed.add_field(name="DIRECT LOW", value=directLow, inline=True)
-
-    firstEditionHolofoilPrices = prices.firstEditionHolofoil        
-    if firstEditionHolofoilPrices is not None:
-        market = "${:,.2f}".format(firstEditionHolofoilPrices.market)
-        directLow = "${:,.2f}".format(firstEditionHolofoilPrices.directLow)
-        low = "${:,.2f}".format(firstEditionHolofoilPrices.low)
-        mid = "${:,.2f}".format(firstEditionHolofoilPrices.mid)
-        high = "${:,.2f}".format(firstEditionHolofoilPrices.high)
-        
-        embed.add_field(name="LOW", value=low, inline=True)
-        embed.add_field(name="MID", value=mid, inline=True)
-        embed.add_field(name="HIGH", value=high, inline=True)
-        embed.add_field(name="MARKET", value=market, inline=True)
-        embed.add_field(name="DIRECT LOW", value=directLow, inline=True)
+    if reverseHolofoilPrices:
+        embed.add_field(name=' -- Reverse Holofoil Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(reverseHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(reverseHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(reverseHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(reverseHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(reverseHolofoilPrices.directLow), inline=True)
 
     firstEditionNormalPrices = prices.firstEditionNormal    
-    if firstEditionNormalPrices is not None:
-        market = "${:,.2f}".format(firstEditionNormalPrices.market)
-        directLow = "${:,.2f}".format(firstEditionNormalPrices.directLow)
-        low = "${:,.2f}".format(firstEditionNormalPrices.low)
-        mid = "${:,.2f}".format(firstEditionNormalPrices.mid)
-        high = "${:,.2f}".format(firstEditionNormalPrices.high)
+    if firstEditionNormalPrices:
+        embed.add_field(name=' -- First Edition Normal Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(firstEditionNormalPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(firstEditionNormalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(firstEditionNormalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(firstEditionNormalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionNormalPrices.directLow), inline=True)
         
-        embed.add_field(name="LOW", value=low, inline=True)
-        embed.add_field(name="MID", value=mid, inline=True)
-        embed.add_field(name="HIGH", value=high, inline=True)
-        embed.add_field(name="MARKET", value=market, inline=True)
-        embed.add_field(name="DIRECT LOW", value=directLow, inline=True)
+    firstEditionHolofoilPrices = prices.firstEditionHolofoil        
+    if firstEditionHolofoilPrices:
+        embed.add_field(name=' -- First Edition Holofoil Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(firstEditionHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(firstEditionHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(firstEditionHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(firstEditionHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionHolofoilPrices.directLow), inline=True)
     
     return embed
 

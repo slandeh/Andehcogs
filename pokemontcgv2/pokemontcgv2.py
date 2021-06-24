@@ -127,8 +127,8 @@ def embed_create(card, card_set):
     # Image
     embed.set_image(url=card.images.large)
 
-    # Set and legality
-    text = "%s - %s/%s\n " % (card_set.name, card.number, card_set.printedTotal)
+    # Set - legality - rarity
+    text = "%s - %s/%s -- %s\n " % (card_set.name, card.number, card_set.printedTotal, card.rarity)
 
     if card_set.legalities.standard == 'Legal':
         text += "\u2705 (Standard) - "

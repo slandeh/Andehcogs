@@ -166,7 +166,7 @@ def pokemon_embed(card):
     if len(card.subtypes) > 1:
         desc += "\n%s" % card.subtypes[1]
 
-    embed = discord.Embed(title=title, color=colour[card.types[0]], value=desc)
+    embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc)
 
     # Ancient Traits
     if card.ancientTrait is not None:
@@ -225,6 +225,8 @@ def pokemon_embed(card):
     if card.rules is not None:
         for rule in card.rules:
             desc += "%s\n" % rule
+    else:
+        desc = '\u200b'
 
     embed.add_field(name=name, value=desc, inline=False)
 

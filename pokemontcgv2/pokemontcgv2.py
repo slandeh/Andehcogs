@@ -6,6 +6,7 @@ from redbot.core.utils.chat_formatting import pagify
 from pokemontcgsdk import Card
 from pokemontcgsdk import Set
 from pokemontcgsdk import RestClient
+from datetime import date
 
 # Rest Client API Token
 RestClient.configure('7eea4656-f765-4ec5-b92b-9aa038b12ce9')
@@ -159,10 +160,11 @@ def embed_create(card, card_set):
 def price_embed(card, card_set):
     embed = None
     prices = card.tcgplayer.prices
+    updateDate = date.fromisoformat(card.tcgplayer.updatedAt.replace('/', '-'))
     
     # Get the name of the card for the title
     title = card.name
-    desc = "Prices provided by TCGPlayer. Last updated: %s" % card.tcgplayer.updatedAt
+    desc = "Prices provided by TCGPlayer. Last updated: %s" % updateDate.strftime('%B %-d, %Y')
     
     embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc, url=card.tcgplayer.url)
     embed.set_thumbnail(url=card.images.small)

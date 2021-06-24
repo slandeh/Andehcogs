@@ -162,11 +162,11 @@ def price_embed(card, card_set):
     
     normalPrices = prices.normal
     if normalPrices is not None:
-        market = "${;,.2f}".format(normalPrices.market)
-        directLow = "${;,.2f}".format(normalPrices.directLow)
-        low = "${;,.2f}".format(normalPrices.low)
-        mid = "${;,.2f}".format(normalPrices.mid)
-        high = "${;,.2f}".format(normalPrices.high)
+        market = "${:,.2f}".format(normalPrices.market)
+        directLow = "${:,.2f}".format(normalPrices.directLow)
+        low = "${:,.2f}".format(normalPrices.low)
+        mid = "${:,.2f}".format(normalPrices.mid)
+        high = "${:,.2f}".format(normalPrices.high)
         
         embed.addfield(title="LOW", value=low, inline=True)
         embed.addfield(title="MID", value=mid, inline=True)
@@ -176,11 +176,11 @@ def price_embed(card, card_set):
 
     holofoilPrices = prices.holofoil    
     if holofoilPrices is not None:
-        market = "${;,.2f}".format(holofoilPrices.market)
-        directLow = "${;,.2f}".format(holofoilPrices.directLow)
-        low = "${;,.2f}".format(holofoilPrices.low)
-        mid = "${;,.2f}".format(holofoilPrices.mid)
-        high = "${;,.2f}".format(holofoilPrices.high)
+        market = "${:,.2f}".format(holofoilPrices.market)
+        directLow = "${:,.2f}".format(holofoilPrices.directLow)
+        low = "${:,.2f}".format(holofoilPrices.low)
+        mid = "${:,.2f}".format(holofoilPrices.mid)
+        high = "${:,.2f}".format(holofoilPrices.high)
         
         embed.addfield(title="LOW", value=low, inline=True)
         embed.addfield(title="MID", value=mid, inline=True)
@@ -190,11 +190,11 @@ def price_embed(card, card_set):
 
     reverseHolofoilPrices = prices.reverseHolofoil    
     if reverseHolofoilPrices is not None:
-        market = "${;,.2f}".format(reverseHolofoilPrices.market)
-        directLow = "${;,.2f}".format(reverseHolofoilPrices.directLow)
-        low = "${;,.2f}".format(reverseHolofoilPrices.low)
-        mid = "${;,.2f}".format(reverseHolofoilPrices.mid)
-        high = "${;,.2f}".format(reverseHolofoilPrices.high)
+        market = "${:,.2f}".format(reverseHolofoilPrices.market)
+        directLow = "${:,.2f}".format(reverseHolofoilPrices.directLow)
+        low = "${:,.2f}".format(reverseHolofoilPrices.low)
+        mid = "${:,.2f}".format(reverseHolofoilPrices.mid)
+        high = "${:,.2f}".format(reverseHolofoilPrices.high)
         
         embed.addfield(title="LOW", value=low, inline=True)
         embed.addfield(title="MID", value=mid, inline=True)
@@ -204,11 +204,11 @@ def price_embed(card, card_set):
 
     firstEditionHolofoilPrices = prices.firstEditionHolofoil        
     if firstEditionHolofoilPrices is not None:
-        market = "${;,.2f}".format(firstEditionHolofoilPrices.market)
-        directLow = "${;,.2f}".format(firstEditionHolofoilPrices.directLow)
-        low = "${;,.2f}".format(firstEditionHolofoilPrices.low)
-        mid = "${;,.2f}".format(firstEditionHolofoilPrices.mid)
-        high = "${;,.2f}".format(firstEditionHolofoilPrices.high)
+        market = "${:,.2f}".format(firstEditionHolofoilPrices.market)
+        directLow = "${:,.2f}".format(firstEditionHolofoilPrices.directLow)
+        low = "${:,.2f}".format(firstEditionHolofoilPrices.low)
+        mid = "${:,.2f}".format(firstEditionHolofoilPrices.mid)
+        high = "${:,.2f}".format(firstEditionHolofoilPrices.high)
         
         embed.addfield(title="LOW", value=low, inline=True)
         embed.addfield(title="MID", value=mid, inline=True)
@@ -218,11 +218,11 @@ def price_embed(card, card_set):
 
     firstEditionNormalPrices = prices.firstEditionNormal    
     if firstEditionNormalPrices is not None:
-        market = "${;,.2f}".format(firstEditionNormalPrices.market)
-        directLow = "${;,.2f}".format(firstEditionNormalPrices.directLow)
-        low = "${;,.2f}".format(firstEditionNormalPrices.low)
-        mid = "${;,.2f}".format(firstEditionNormalPrices.mid)
-        high = "${;,.2f}".format(firstEditionNormalPrices.high)
+        market = "${:,.2f}".format(firstEditionNormalPrices.market)
+        directLow = "${:,.2f}".format(firstEditionNormalPrices.directLow)
+        low = "${:,.2f}".format(firstEditionNormalPrices.low)
+        mid = "${:,.2f}".format(firstEditionNormalPrices.mid)
+        high = "${:,.2f}".format(firstEditionNormalPrices.high)
         
         embed.addfield(title="LOW", value=low, inline=True)
         embed.addfield(title="MID", value=mid, inline=True)

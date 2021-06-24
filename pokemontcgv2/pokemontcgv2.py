@@ -148,6 +148,91 @@ def embed_create(card, card_set):
     return embed
 
 
+# Build an embed with pricing information, given a card
+def price_embed(card, card_set):
+    embed = None
+    prices = card.tcgplayer.prices
+    
+    # Get the name of the card for the title
+    title = card.name
+    desc = "Prices provided by TCGPlayer. Prices last updated: %s" % card.tcgplayer.updatedAt
+    
+    embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc, url=card.tcgplayer.url)
+    embed.set_thumbnail(url=card.images.small)
+    
+    normalPrices = prices.normal
+    if normalPrices is not None:
+        market = "${;,.2f}".format(normalPrices.market)
+        directLow = "${;,.2f}".format(normalPrices.directLow)
+        low = "${;,.2f}".format(normalPrices.low)
+        mid = "${;,.2f}".format(normalPrices.mid)
+        high = "${;,.2f}".format(normalPrices.high)
+        
+        embed.addfield(title="LOW", value=low, inline=True)
+        embed.addfield(title="MID", value=mid, inline=True)
+        embed.addfield(title="HIGH", value=high, inline=True)
+        embed.addfield(title="MARKET", value=market, inline=True)
+        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+
+    holofoilPrices = prices.holofoil    
+    if holofoilPrices is not None:
+        market = "${;,.2f}".format(holofoilPrices.market)
+        directLow = "${;,.2f}".format(holofoilPrices.directLow)
+        low = "${;,.2f}".format(holofoilPrices.low)
+        mid = "${;,.2f}".format(holofoilPrices.mid)
+        high = "${;,.2f}".format(holofoilPrices.high)
+        
+        embed.addfield(title="LOW", value=low, inline=True)
+        embed.addfield(title="MID", value=mid, inline=True)
+        embed.addfield(title="HIGH", value=high, inline=True)
+        embed.addfield(title="MARKET", value=market, inline=True)
+        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+
+    reverseHolofoilPrices = prices.reverseHolofoil    
+    if reverseHolofoilPrices is not None:
+        market = "${;,.2f}".format(reverseHolofoilPrices.market)
+        directLow = "${;,.2f}".format(reverseHolofoilPrices.directLow)
+        low = "${;,.2f}".format(reverseHolofoilPrices.low)
+        mid = "${;,.2f}".format(reverseHolofoilPrices.mid)
+        high = "${;,.2f}".format(reverseHolofoilPrices.high)
+        
+        embed.addfield(title="LOW", value=low, inline=True)
+        embed.addfield(title="MID", value=mid, inline=True)
+        embed.addfield(title="HIGH", value=high, inline=True)
+        embed.addfield(title="MARKET", value=market, inline=True)
+        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+
+    firstEditionHolofoilPrices = prices.firstEditionHolofoil        
+    if firstEditionHolofoilPrices is not None:
+        market = "${;,.2f}".format(firstEditionHolofoilPrices.market)
+        directLow = "${;,.2f}".format(firstEditionHolofoilPrices.directLow)
+        low = "${;,.2f}".format(firstEditionHolofoilPrices.low)
+        mid = "${;,.2f}".format(firstEditionHolofoilPrices.mid)
+        high = "${;,.2f}".format(firstEditionHolofoilPrices.high)
+        
+        embed.addfield(title="LOW", value=low, inline=True)
+        embed.addfield(title="MID", value=mid, inline=True)
+        embed.addfield(title="HIGH", value=high, inline=True)
+        embed.addfield(title="MARKET", value=market, inline=True)
+        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+
+    firstEditionNormalPrices = prices.firstEditionNormal    
+    if firstEditionNormalPrices is not None:
+        market = "${;,.2f}".format(firstEditionNormalPrices.market)
+        directLow = "${;,.2f}".format(firstEditionNormalPrices.directLow)
+        low = "${;,.2f}".format(firstEditionNormalPrices.low)
+        mid = "${;,.2f}".format(firstEditionNormalPrices.mid)
+        high = "${;,.2f}".format(firstEditionNormalPrices.high)
+        
+        embed.addfield(title="LOW", value=low, inline=True)
+        embed.addfield(title="MID", value=mid, inline=True)
+        embed.addfield(title="HIGH", value=high, inline=True)
+        embed.addfield(title="MARKET", value=market, inline=True)
+        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+    
+    return embed
+
+
 # Construct an Embed object from a Pokemon card and it's set
 def pokemon_embed(card):
 
@@ -280,7 +365,6 @@ def show(name, card_set_text):
     card_set = Set.find(card.set.id)
     return embed_create(card, card_set)
 
-
 # Given a card name and set code, return the card text as plain text
 def text(name, card_set_text):
     card = parse_card(name, card_set_text)
@@ -382,6 +466,16 @@ def text(name, card_set_text):
     return_str += "```\n"
     return return_str
 
+# Given the card name and set code, searches for the price of the card
+@lru_cache(maxsize=1024)
+def price(name, card_set_text):
+    card = parse_card(name, card_set_text)
+
+    if type(card) == str:
+        return card
+
+    card_set = Set.find(card.set.id)
+    return price_embed(card, card_set)
 
 class PokemonTCGv2(commands.Cog):
     def __init__(self, bot):
@@ -444,4 +538,18 @@ class PokemonTCGv2(commands.Cog):
             !text xy9-113
         """
         message = await self._run_in_thread(text, name, set_text)
+        await self._smart_send(ctx.message.channel, message)
+        
+    @commands.command(pass_context=True)
+    async def price(self, ctx, set_text: str, *, name: str = None):
+        """
+        Displays the prices for the given card from the given set.
+        Prices are provided by TCGPlayer. If you're unsure of the
+        card, find it with [p]card first.
+        Examples:
+            !price sm3-12
+            !price swsh4-130
+            !price swsh4-156
+        """
+        message = await self._run_in_thread(price, name, set_text)
         await self._smart_send(ctx.message.channel, message)

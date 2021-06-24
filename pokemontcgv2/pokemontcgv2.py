@@ -82,15 +82,15 @@ def search(name):
     # search for both
     cards = []
     if name.lower().endswith(" ex"):
-        cards.extend(Card.where(name = name.lower()))
-        cards.extend(Card.where(name = name.lower().replace(" ex", "-ex")))
+        cards.extend(Card.where(q=f'name:"{name.lower()}"'))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" ex", "-ex")}"'))
     # GX cards do not have the same issue, so we can simply insert the dash
     # as expected
     elif name.lower().endswith(" gx"):
-        cards.extend(Card.where(name = name.lower().replace(" gx", "-gx")))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" gx", "-gx")}"'))
     # Delta card text replacement
     elif name.lower().endswith(" delta"):
-        cards.extend(Card.where(name = name.lower().replace(" delta", " δ")))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" delta", " δ")"'))
     # Handling "N"
     elif name.lower() == "n":
         return_str = "Matches for search 'N'\n"

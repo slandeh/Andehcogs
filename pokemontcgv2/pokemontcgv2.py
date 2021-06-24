@@ -168,11 +168,11 @@ def price_embed(card, card_set):
         mid = "${:,.2f}".format(normalPrices.mid)
         high = "${:,.2f}".format(normalPrices.high)
         
-        embed.addfield(title="LOW", value=low, inline=True)
-        embed.addfield(title="MID", value=mid, inline=True)
-        embed.addfield(title="HIGH", value=high, inline=True)
-        embed.addfield(title="MARKET", value=market, inline=True)
-        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+        embed.add_field(title="LOW", value=low, inline=True)
+        embed.add_field(title="MID", value=mid, inline=True)
+        embed.add_field(title="HIGH", value=high, inline=True)
+        embed.add_field(title="MARKET", value=market, inline=True)
+        embed.add_field(title="DIRECT LOW", value=directLow, inline=True)
 
     holofoilPrices = prices.holofoil    
     if holofoilPrices is not None:
@@ -182,11 +182,11 @@ def price_embed(card, card_set):
         mid = "${:,.2f}".format(holofoilPrices.mid)
         high = "${:,.2f}".format(holofoilPrices.high)
         
-        embed.addfield(title="LOW", value=low, inline=True)
-        embed.addfield(title="MID", value=mid, inline=True)
-        embed.addfield(title="HIGH", value=high, inline=True)
-        embed.addfield(title="MARKET", value=market, inline=True)
-        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+        embed.add_field(title="LOW", value=low, inline=True)
+        embed.add_field(title="MID", value=mid, inline=True)
+        embed.add_field(title="HIGH", value=high, inline=True)
+        embed.add_field(title="MARKET", value=market, inline=True)
+        embed.add_field(title="DIRECT LOW", value=directLow, inline=True)
 
     reverseHolofoilPrices = prices.reverseHolofoil    
     if reverseHolofoilPrices is not None:
@@ -196,11 +196,11 @@ def price_embed(card, card_set):
         mid = "${:,.2f}".format(reverseHolofoilPrices.mid)
         high = "${:,.2f}".format(reverseHolofoilPrices.high)
         
-        embed.addfield(title="LOW", value=low, inline=True)
-        embed.addfield(title="MID", value=mid, inline=True)
-        embed.addfield(title="HIGH", value=high, inline=True)
-        embed.addfield(title="MARKET", value=market, inline=True)
-        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+        embed.add_field(title="LOW", value=low, inline=True)
+        embed.add_field(title="MID", value=mid, inline=True)
+        embed.add_field(title="HIGH", value=high, inline=True)
+        embed.add_field(title="MARKET", value=market, inline=True)
+        embed.add_field(title="DIRECT LOW", value=directLow, inline=True)
 
     firstEditionHolofoilPrices = prices.firstEditionHolofoil        
     if firstEditionHolofoilPrices is not None:
@@ -210,11 +210,11 @@ def price_embed(card, card_set):
         mid = "${:,.2f}".format(firstEditionHolofoilPrices.mid)
         high = "${:,.2f}".format(firstEditionHolofoilPrices.high)
         
-        embed.addfield(title="LOW", value=low, inline=True)
-        embed.addfield(title="MID", value=mid, inline=True)
-        embed.addfield(title="HIGH", value=high, inline=True)
-        embed.addfield(title="MARKET", value=market, inline=True)
-        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+        embed.add_field(title="LOW", value=low, inline=True)
+        embed.add_field(title="MID", value=mid, inline=True)
+        embed.add_field(title="HIGH", value=high, inline=True)
+        embed.add_field(title="MARKET", value=market, inline=True)
+        embed.add_field(title="DIRECT LOW", value=directLow, inline=True)
 
     firstEditionNormalPrices = prices.firstEditionNormal    
     if firstEditionNormalPrices is not None:
@@ -224,11 +224,11 @@ def price_embed(card, card_set):
         mid = "${:,.2f}".format(firstEditionNormalPrices.mid)
         high = "${:,.2f}".format(firstEditionNormalPrices.high)
         
-        embed.addfield(title="LOW", value=low, inline=True)
-        embed.addfield(title="MID", value=mid, inline=True)
-        embed.addfield(title="HIGH", value=high, inline=True)
-        embed.addfield(title="MARKET", value=market, inline=True)
-        embed.addfield(title="DIRECT LOW", value=directLow, inline=True)
+        embed.add_field(title="LOW", value=low, inline=True)
+        embed.add_field(title="MID", value=mid, inline=True)
+        embed.add_field(title="HIGH", value=high, inline=True)
+        embed.add_field(title="MARKET", value=market, inline=True)
+        embed.add_field(title="DIRECT LOW", value=directLow, inline=True)
     
     return embed
 

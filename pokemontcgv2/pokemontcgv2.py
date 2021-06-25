@@ -90,7 +90,7 @@ def search(name):
         cards.extend(Card.where(q=f'name:"{name.lower().replace(" gx", "-gx")}"'))
     # Delta card text replacement
     elif name.lower().endswith(" delta"):
-        cards.extend(Card.where(q=f'name:"{name.lower().replace(" delta", " δ")"'))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" delta", " δ")}"'))
     # Handling "N"
     elif name.lower() == "n":
         return_str = "Matches for search 'N'\n"

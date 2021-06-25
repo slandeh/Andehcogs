@@ -1,17 +1,15 @@
-# Discord
 import discord
-
-# Third-Party
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
-
-# Redbot
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import pagify
-
-# PokemonTCG SDK
 from pokemontcgsdk import Card
 from pokemontcgsdk import Set
+from pokemontcgsdk import RestClient
+from datetime import date
+
+# Rest Client API Token
+RestClient.configure('7eea4656-f765-4ec5-b92b-9aa038b12ce9')
 
 # The maximum number of lines the bot will post to a public server in one
 # message. Anything larger will be private messaged to avoid clutter
@@ -63,6 +61,13 @@ short_energy = {
     'Water'     : "[W]",
 }
 
+# Getting price values
+def valueSearch(value):
+    if not value:
+        return '- N/A -'
+    
+    return f'{value:,.2f}'
+
 
 # Given a string, searches for cards by name using the given string. Return a
 # list of matches sorted by release, and the set name and code the card was
@@ -77,15 +82,15 @@ def search(name):
     # search for both
     cards = []
     if name.lower().endswith(" ex"):
-        cards.extend(Card.where(name = name.lower()))
-        cards.extend(Card.where(name = name.lower().replace(" ex", "-ex")))
+        cards.extend(Card.where(q=f'name:"{name.lower()}"'))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" ex", "-ex")}"'))
     # GX cards do not have the same issue, so we can simply insert the dash
     # as expected
     elif name.lower().endswith(" gx"):
-        cards.extend(Card.where(name = name.lower().replace(" gx", "-gx")))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" gx", "-gx")}"'))
     # Delta card text replacement
     elif name.lower().endswith(" delta"):
-        cards.extend(Card.where(name = name.lower().replace(" delta", " δ")))
+        cards.extend(Card.where(q=f'name:"{name.lower().replace(" delta", " δ")}"'))
     # Handling "N"
     elif name.lower() == "n":
         return_str = "Matches for search 'N'\n"
@@ -99,7 +104,7 @@ def search(name):
         return (return_str, 6)
     # Otherwise, search for the given text
     else:
-        cards = Card.where(name = name)
+        cards = Card.where(q=f'name:"{name}"', orderBy="set.releaseDate")
     
     # Give an error if there are no matches
     if len(cards) == 0:
@@ -108,31 +113,16 @@ def search(name):
     # If there is exactly one match, save time for the user and give the
     # !show output instead
     if len(cards) == 1:
-        return (show(cards[0].name, cards[0].set_code), 1)
-
-    # If there are matches, build a string with the name, set and set code
-    # of every match
-    cards_with_sets = []
-    for card in cards:
-        card_set = Set.find(card.set_code)
-
-        # Re-arrange the release data so it is ISO
-        date_split = card_set.release_date.split("/")
-        card_set.release_date = "%s-%s-%s" % (date_split[2], date_split[0], date_split[1])
-
-        cards_with_sets.append((card, card_set))
-
-    # Sort the list of cards by set release date
-    cards_with_sets.sort(key = lambda card : card[1].release_date)
+        return (show(cards[0].name, cards[0].set.id), 1)
 
     # Create the returned string
     return_str = "Matches for search '%s'\n" % name
-    for card in cards_with_sets:
-        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card[0].name, card[1].name,
-                                                      card[0].number, card[1].total_cards,
-                                                      card[1].code, card[0].number))
+    for card in cards:
+        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.series,
+                                                      card.number, card.set.printedTotal,
+                                                      card.set.id, card.number))
 
-    return (return_str, len(cards_with_sets))
+    return (return_str, len(cards))
 
 
 def embed_create(card, card_set):
@@ -143,20 +133,87 @@ def embed_create(card, card_set):
         embed = trainer_embed(card)
 
     # Image
-    embed.set_image(url=card.image_url)
+    embed.set_image(url=card.images.large)
 
-    # Set and legality
-    text = "%s - %s/%s " % (card_set.name, card.number, card_set.total_cards)
+    # Set - legality - rarity
+    text = "%s - %s/%s -- %s\n " % (card_set.name, card.number, card_set.printedTotal, card.rarity)
 
-    if card_set.standard_legal:
-        text += " (Standard)"
-    elif card_set.expanded_legal:
-        text += " (Expanded)"
-    else:
-        text += " (Legacy)"
+    if card_set.legalities.standard == 'Legal':
+        text += "\u2705 (Standard) - "
+    elif card_set.legalities.standard == 'Banned':
+        text += "\u274C (Standard) - "
+    if card_set.legalities.expanded == 'Legal':
+        text += "\u2705 (Expanded) - "
+    elif card_set.legalities.expanded == 'Banned':
+        text += "\u274C (Expanded) - "
+    if card_set.legalities.unlimited == 'Legal':
+        text += "\u2705 (Legacy)"
+    elif card_set.legalities.unlimited == 'Banned':
+        text += "\u274C (Legacy)"
 
-    embed.set_footer(text=text, icon_url=card_set.symbol_url)
+    embed.set_footer(text=text, icon_url=card_set.images.symbol)
 
+    return embed
+
+
+# Build an embed with pricing information, given a card
+def price_embed(card, card_set):
+    embed = None
+    prices = card.tcgplayer.prices
+    updateDate = date.fromisoformat(card.tcgplayer.updatedAt.replace('/', '-'))
+    
+    # Get the name of the card for the title
+    title = card.name
+    desc = "Prices provided by TCGPlayer. Last updated: %s" % updateDate.strftime('%B %-d, %Y')
+    
+    embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc, url=card.tcgplayer.url)
+    embed.set_thumbnail(url=card.images.small)
+    
+    normalPrices = prices.normal
+    if normalPrices:
+        embed.add_field(name=' -- Normal Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(normalPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(normalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(normalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(normalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(normalPrices.directLow), inline=True)
+
+    holofoilPrices = prices.holofoil    
+    if holofoilPrices:
+        embed.add_field(name=' -- Holofoil Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(holofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(holofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(holofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(holofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(holofoilPrices.directLow), inline=True)
+
+    reverseHolofoilPrices = prices.reverseHolofoil    
+    if reverseHolofoilPrices:
+        embed.add_field(name=' -- Reverse Holofoil Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(reverseHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(reverseHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(reverseHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(reverseHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(reverseHolofoilPrices.directLow), inline=True)
+
+    firstEditionNormalPrices = prices.firstEditionNormal    
+    if firstEditionNormalPrices:
+        embed.add_field(name=' -- First Edition Normal Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(firstEditionNormalPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(firstEditionNormalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(firstEditionNormalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(firstEditionNormalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionNormalPrices.directLow), inline=True)
+        
+    firstEditionHolofoilPrices = prices.firstEditionHolofoil        
+    if firstEditionHolofoilPrices:
+        embed.add_field(name=' -- First Edition Holofoil Prices --', value='\u200b', inline=False)
+        embed.add_field(name="LOW", value=valueSearch(firstEditionHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value=valueSearch(firstEditionHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value=valueSearch(firstEditionHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value=valueSearch(firstEditionHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionHolofoilPrices.directLow), inline=True)
+    
     return embed
 
 
@@ -172,16 +229,26 @@ def pokemon_embed(card):
     title += " - " + " / ".join(list(map(lambda x : emoji[x], card.types)))
 
     # Subtype, evolution
-    desc = "%s Pokémon" % card.subtype
-    if card.evolves_from is not None and card.evolves_from != "":
-        desc += " (Evolves from %s)" % card.evolves_from
+    desc = "%s Pokémon" % card.subtypes[0]
+    if card.evolvesFrom is not None and card.evolvesFrom != "":
+        desc += " (Evolves from %s)" % card.evolvesFrom
+    if len(card.subtypes) > 1:
+        desc += "\n%s" % card.subtypes[1]
 
     embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc)
 
+    # Ancient Traits
+    if card.ancientTrait is not None:
+        name = "Ancient Trait: %s" % card.ancientTrait.name
+        desc = "%s" % card.ancientTrait.text
+        embed.add_field(name=name, value=desc or '\u200b')
+    
     # Ability
-    if card.ability is not None:
-        name = "%s: %s" % (card.ability['type'], card.ability['name'])
-        embed.add_field(name=name, value=card.ability['text'] or '\u200b')
+    if card.abilities is not None:
+        for ability in card.abilities:
+            name = "%s: %s" % (ability.type, ability.name)
+            desc = "%s" % ability.text
+            embed.add_field(name=name, value=desc or '\u200b')
 
     # Attacks
     if card.attacks is not None:
@@ -189,16 +256,16 @@ def pokemon_embed(card):
             name = ""
             text = ""
 
-            for cost in attack['cost']:
+            for cost in attack.cost:
                 name += "%s" % emoji[cost]
 
-            name += " %s" % attack['name']
+            name += " %s" % attack.name
 
-            if attack['damage'] != '':
-                name += " - %s" % attack['damage']
+            if attack.damage != '':
+                name += " - %s" % attack.damage
 
-            if attack['text'] is not None and attack['text'] != "":
-                text = attack['text']
+            if attack.text is not None and attack.text != "":
+                text = attack.text
             else:
                 text = '\u200b'
 
@@ -206,33 +273,41 @@ def pokemon_embed(card):
 
     # Weakness, resistance, retreat
     name = ""
-
+    desc = ""
+    
     if card.weaknesses is not None:
         name += "Weakness: "
         for weakness in card.weaknesses:
-            name += "%s (%s)" % (emoji[weakness['type']], weakness['value'])
+            name += "%s (%s)" % (emoji[weakness.type], weakness.value)
 
     if card.resistances is not None:
         name += " - Resistance: "
 
         for resistance in card.resistances:
-            name += "%s (%s)" % (emoji[resistance['type']], resistance['value'])
+            name += "%s (%s)" % (emoji[resistance.type], resistance.value)
 
-    if card.retreat_cost is not None:
+    if card.retreatCost is not None:
         name += " - Retreat: "
-        name += "%s" % emoji['Colorless'] * len(card.retreat_cost)
+        name += "%s" % emoji['Colorless'] * len(card.retreatCost)
+    # Ruleboxes
+    
+    if card.rules is not None:
+        for rule in card.rules:
+            desc += "%s\n" % rule
+    else:
+        desc = '\u200b'
 
-    if name != "":
-        embed.add_field(name=name, value='\u200b', inline=False)
+    embed.add_field(name=name, value=desc, inline=False)
 
     return embed
 
 
 # Construct an Embed object from a Trainer or Energy card and it's set
 def trainer_embed(card):
-    embed = discord.Embed(title=card.name, description=card.subtype)
+    desc = "%s - %s" % (card.supertype, card.subtypes)
+    embed = discord.Embed(title=card.name, description=desc)
 
-    for text in card.text:
+    for text in card.rules:
         embed.add_field(name='\u200b', value=text)
 
     return embed
@@ -271,14 +346,13 @@ def show(name, card_set_text):
     if type(card) == str:
         return card
 
-    card_set = Set.find(card.set_code)
+    card_set = Set.find(card.set.id)
     return embed_create(card, card_set)
-
 
 # Given a card name and set code, return the card text as plain text
 def text(name, card_set_text):
     card = parse_card(name, card_set_text)
-    card_set = Set.find(card.set_code)
+    card_set = Set.find(card.set.id)
 
     # Create a string for the card text
     return_str = "```\n"
@@ -295,66 +369,97 @@ def text(name, card_set_text):
         else:
             return_str += "\n"
 
-        return_str += "%s Pokemon" % card.subtype
-        if card.evolves_from is not None and card.evolves_from != "":
-            return_str += " (Evolves from %s)" % card.evolves_from
+        return_str += "%s Pokemon" % card.subtypes
+        if card.evolvesFrom is not None and card.evolvesFrom != "":
+            return_str += " (Evolves from %s)" % card.evolvesFrom
+        if len(card.subtypes) > 1:
+            return_str += "%s" % card.subtypes[1]
 
         return_str += "\n\n"
+        
+        # Ancient Traits
+        if card.ancientTrait is not None:
+            return_str += "Ancient Trait: %s\n" % card.ancientTrait.name
+            return_str += "%s\n" % card.ancientTrait.text
+            return_str += "\n"
 
         # Add the ability if present
-        if card.ability is not None:
-            return_str += "%s: %s\n" % (card.ability['type'], card.ability['name'])
-            return_str += "%s\n" % card.ability['text']
-            return_str += "\n"
+        if card.abilities is not None:
+            for ability in card.abilities:
+                return_str += "%s: %s\n" % (ability.type, ability.name)
+                return_str += "%s\n" % ability.text
+                return_str += "\n"
 
         # Add any attacks, including shorthand cost, text and damage
         if card.attacks is not None:
             for attack in card.attacks:
-                for cost in attack['cost']:
+                for cost in attack.cost:
                     return_str += "%s" % short_energy[cost]
 
-                return_str += " %s" % attack['name']
+                return_str += " %s" % attack.name
 
-                if attack['damage'] != '':
-                    return_str += ": %s damage\n" % attack['damage']
+                if attack.damage != '':
+                    return_str += ": %s damage\n" % attack.damage
                 else:
                     return_str += "\n"
 
-                if attack['text'] is not None:
-                    return_str += "%s\n" % attack['text']
+                if attack.text is not None:
+                    return_str += "%s\n" % attack.text
 
                 return_str += "\n"
 
         # Add weakness, resistances and retreat if they exist
         if card.weaknesses is not None:
             for weakness in card.weaknesses:
-                return_str += ("Weakness: %s (%s)\n" % (weakness['type'], weakness['value']))
+                return_str += ("Weakness: %s (%s)\n" % (weakness.type, weakness.value))
 
         if card.resistances is not None:
             for resistance in card.resistances:
-                return_str += ("Resistance: %s (%s)\n" % (resistance['type'], resistance['value']))
+                return_str += ("Resistance: %s (%s)\n" % (resistance.type, resistance.value))
 
-        if card.retreat_cost is not None:
-            return_str += "Retreat: %s" % len(card.retreat_cost)
+        if card.retreatCost is not None:
+            return_str += "Retreat: %s" % len(card.retreatCost)
+        
+        # Ruleboxes
+        if card.rules is not None:
+            return_str += "\n\n"
+            for rule in card.rules:
+                return_str += "%s" % rule
 
     # Trainers and Energy are a lot easier
     elif card.supertype == "Trainer" or card.supertype == "Energy":
         return_str += "%s\n" % card.name
-        return_str += "%s\n\n" % card.subtype
-        return_str += "%s\n" % "\n\n".join(card.text)
+        return_str += "%s\n\n" % card.subtypes
+        return_str += "%s\n" % "\n\n".join(card.rules)
 
     # Finally, get the set and legality info
-    return_str += "\n\n%s - %s/%s" % (card_set.name, card.number, card_set.total_cards)
-    if card_set.standard_legal:
-        return_str += " (Standard)"
-    elif card_set.expanded_legal:
-        return_str += " (Expanded)"
-    else:
-        return_str += " (Legacy)"
+    return_str += "\n\n%s - %s/%s" % (card_set.name, card.number, card_set.printedTotal)
+    if card_set.legalities.standard == 'Legal':
+        return_str += " \u2705 (Standard)"
+    elif card_set.legalities.standard == 'Banned':
+        return_str += " \u274C (Standard)"
+    if card_set.legalities.expanded == 'Legal':
+        return_str += " \u2705 (Expanded)"
+    elif card_set.legalities.expanded == 'Banned':
+        return_str += " \u274C (Expanded)"
+    if card_set.legalities.unlimited == 'Legal':
+        return_str += " \u2705 (Legacy)"
+    elif card_set.legalities.unlimited == 'Banned':
+        return_str += " \u274C (Legacy)"
 
     return_str += "```\n"
     return return_str
 
+# Given the card name and set code, searches for the price of the card
+@lru_cache(maxsize=1024)
+def price(name, card_set_text):
+    card = parse_card(name, card_set_text)
+
+    if type(card) == str:
+        return card
+
+    card_set = Set.find(card.set.id)
+    return price_embed(card, card_set)
 
 class PokemonTCG(commands.Cog):
     def __init__(self, bot):
@@ -378,9 +483,7 @@ class PokemonTCG(commands.Cog):
     async def card(self, ctx, *, card_name: str):
         """
         Gives a list of all cards matching the search.
-
         Also displays the set code and name.
-
         Examples:
             !card ambipom
             !card ninja boy
@@ -400,9 +503,7 @@ class PokemonTCG(commands.Cog):
     async def show(self, ctx, set_text: str, *, name: str = None):
         """
         Displays the text and image of the given card from the given set.
-
         If you are unsure of the set code, find it using [p]card first.
-
         Examples:
             !show xy11-91
             !show xy11-103
@@ -415,11 +516,24 @@ class PokemonTCG(commands.Cog):
     async def text(self, ctx, set_text: str, *, name: str = None):
         """
         Similar to [p]show, but gives just the card text in a copy-and-pastable format.
-
         Examples:
             !text xy11-91
             !text xy11-103
             !text xy9-113
         """
         message = await self._run_in_thread(text, name, set_text)
+        await self._smart_send(ctx.message.channel, message)
+        
+    @commands.command(pass_context=True)
+    async def price(self, ctx, set_text: str, *, name: str = None):
+        """
+        Displays the prices for the given card from the given set.
+        Prices are provided by TCGPlayer. If you're unsure of the
+        card, find it with [p]card first.
+        Examples:
+            !price sm3-12
+            !price swsh4-130
+            !price swsh4-156
+        """
+        message = await self._run_in_thread(price, name, set_text)
         await self._smart_send(ctx.message.channel, message)

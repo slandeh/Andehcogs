@@ -118,7 +118,7 @@ def search(name):
     # Create the returned string
     return_str = "Matches for search '%s'\n" % name
     for card in cards:
-        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.series,
+        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.name,
                                                       card.number, card.set.printedTotal,
                                                       card.set.id, card.number))
 

@@ -297,7 +297,7 @@ def pokemon_embed(card):
     else:
         desc = '\u200b'
 
-    embed.add_field(name=name, value=desc, inline=False)
+    embed.add_field(name=name or '\u200b', value=desc, inline=False)
 
     return embed
 

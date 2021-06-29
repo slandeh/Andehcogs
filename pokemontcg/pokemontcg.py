@@ -138,17 +138,17 @@ def embed_create(card, card_set):
     # Set - legality - rarity
     text = "%s - %s/%s -- %s\n " % (card_set.name, card.number, card_set.printedTotal, card.rarity)
 
-    if card_set.legalities.standard == 'Legal':
+    if card.legalities.standard == 'Legal':
         text += "\u2705 (Standard) - "
-    elif card_set.legalities.standard == 'Banned':
+    elif card.legalities.standard == 'Banned':
         text += "\u274C (Standard) - "
-    if card_set.legalities.expanded == 'Legal':
+    if card.legalities.expanded == 'Legal':
         text += "\u2705 (Expanded) - "
-    elif card_set.legalities.expanded == 'Banned':
+    elif card.legalities.expanded == 'Banned':
         text += "\u274C (Expanded) - "
-    if card_set.legalities.unlimited == 'Legal':
+    if card.legalities.unlimited == 'Legal':
         text += "\u2705 (Legacy)"
-    elif card_set.legalities.unlimited == 'Banned':
+    elif card.legalities.unlimited == 'Banned':
         text += "\u274C (Legacy)"
 
     embed.set_footer(text=text, icon_url=card_set.images.symbol)
@@ -434,17 +434,17 @@ def text(name, card_set_text):
 
     # Finally, get the set and legality info
     return_str += "\n\n%s - %s/%s" % (card_set.name, card.number, card_set.printedTotal)
-    if card_set.legalities.standard == 'Legal':
+    if card.legalities.standard == 'Legal':
         return_str += " \u2705 (Standard)"
-    elif card_set.legalities.standard == 'Banned':
+    elif card.legalities.standard == 'Banned':
         return_str += " \u274C (Standard)"
-    if card_set.legalities.expanded == 'Legal':
+    if card.legalities.expanded == 'Legal':
         return_str += " \u2705 (Expanded)"
-    elif card_set.legalities.expanded == 'Banned':
+    elif card.legalities.expanded == 'Banned':
         return_str += " \u274C (Expanded)"
-    if card_set.legalities.unlimited == 'Legal':
+    if card.legalities.unlimited == 'Legal':
         return_str += " \u2705 (Legacy)"
-    elif card_set.legalities.unlimited == 'Banned':
+    elif card.legalities.unlimited == 'Banned':
         return_str += " \u274C (Legacy)"
 
     return_str += "```\n"

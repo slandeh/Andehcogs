@@ -147,9 +147,9 @@ def embed_create(card, card_set):
     elif card.legalities.expanded == 'Banned':
         text += "\u274C (Expanded) - "
     if card.legalities.unlimited == 'Legal':
-        text += "\u2705 (Legacy)"
+        text += "\u2705 (Unlimited)"
     elif card.legalities.unlimited == 'Banned':
-        text += "\u274C (Legacy)"
+        text += "\u274C (Unlimited)"
 
     embed.set_footer(text=text, icon_url=card_set.images.symbol)
 
@@ -443,9 +443,9 @@ def text(name, card_set_text):
     elif card.legalities.expanded == 'Banned':
         return_str += " \u274C (Expanded)"
     if card.legalities.unlimited == 'Legal':
-        return_str += " \u2705 (Legacy)"
+        return_str += " \u2705 (Unlimited)"
     elif card.legalities.unlimited == 'Banned':
-        return_str += " \u274C (Legacy)"
+        return_str += " \u274C (Unlimited)"
 
     return_str += "```\n"
     return return_str

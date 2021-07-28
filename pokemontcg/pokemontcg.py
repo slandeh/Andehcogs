@@ -306,7 +306,7 @@ def pokemon_embed(card):
 def trainer_embed(card):
     if card.subtypes == 'None':
         desc = "%s" % (card.supertype)
-    else
+    else:
         desc = "%s - %s" % (card.supertype, card.subtypes[0])
     embed = discord.Embed(title=card.name, description=desc)
 

@@ -321,7 +321,7 @@ def trainer_embed(card):
 # Construct an Embed object from an Energy card and it's set
 def energy_embed(card):
     desc = "%s - %s" % (card.supertype, card.subtypes[0])
-    if card.subtypes[1] is not None:
+    if len(card.subtypes) > 1:
         desc += "(%s)" % (card.subtypes[1])
     embed = discord.Embed(title=card.name, description=desc)
     

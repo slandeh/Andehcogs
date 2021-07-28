@@ -129,8 +129,10 @@ def embed_create(card, card_set):
     embed = None
     if card.supertype == "Pokémon":
         embed = pokemon_embed(card)
-    elif card.supertype == "Trainer" or card.supertype == "Energy":
+    elif card.supertype == "Trainer":
         embed = trainer_embed(card)
+    elif card.supertype == "Energy":
+        embed = energy_embed(card)
 
     # Image
     embed.set_image(url=card.images.large)

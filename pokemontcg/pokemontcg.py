@@ -304,7 +304,7 @@ def pokemon_embed(card):
 
 # Construct an Embed object from a Trainer card and it's set
 def trainer_embed(card):
-    if card.subtypes == 'None':
+    if card.subtypes is None:
         desc = "%s" % (card.supertype)
     else:
         desc = "%s - %s" % (card.supertype, card.subtypes[0])
@@ -319,11 +319,11 @@ def trainer_embed(card):
 # Construct an Embed object from an Energy card and it's set
 def energy_embed(card):
     desc = "%s - %s" % (card.supertype, card.subtypes[0])
-    if card.subtypes[1] != 'None':
+    if card.subtypes[1] is not None:
         desc += "(%s)" % (card.subtypes[1])
     embed = discord.Embed(title=card.name, description=desc)
     
-    if card.rules != 'None':
+    if card.rules is not None:
         for text in card.rules:
             embed.add_field(name='\u200b', value=text)
     

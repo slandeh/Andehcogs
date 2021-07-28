@@ -322,7 +322,7 @@ def trainer_embed(card):
 def energy_embed(card):
     desc = "%s - %s" % (card.supertype, card.subtypes[0])
     if len(card.subtypes) > 1:
-        desc += "(%s)" % (card.subtypes[1])
+        desc += " (%s)" % (card.subtypes[1])
     embed = discord.Embed(title=card.name, description=desc)
     
     if card.rules is not None:

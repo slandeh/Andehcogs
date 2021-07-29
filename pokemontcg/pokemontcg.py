@@ -168,7 +168,7 @@ def price_embed(card, card_set):
     title = card.name
     desc = "Prices provided by TCGPlayer. Last updated: %s" % updateDate.strftime('%B %-d, %Y')
     
-    embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc, url=card.tcgplayer.url)
+    embed = discord.Embed(title=title, description=desc, url=card.tcgplayer.url)
     embed.set_thumbnail(url=card.images.small)
     
     normalPrices = prices.normal

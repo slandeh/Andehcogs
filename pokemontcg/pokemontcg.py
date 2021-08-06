@@ -158,8 +158,8 @@ def embed_create(card, card_set):
     return embed
 
 
-# Build an embed with pricing information, given a card
-def price_embed(card, card_set):
+# Build an embed with pricing information, given a card (TCGPLAYER)
+def tcgprice_embed(card, card_set):
     embed = None
     prices = card.tcgplayer.prices
     updateDate = date.fromisoformat(card.tcgplayer.updatedAt.replace('/', '-'))
@@ -174,47 +174,73 @@ def price_embed(card, card_set):
     normalPrices = prices.normal
     if normalPrices:
         embed.add_field(name=' -- Normal Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(normalPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(normalPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(normalPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(normalPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(normalPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(normalPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(normalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(normalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(normalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(normalPrices.directLow), inline=True)
 
     holofoilPrices = prices.holofoil    
     if holofoilPrices:
         embed.add_field(name=' -- Holofoil Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(holofoilPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(holofoilPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(holofoilPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(holofoilPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(holofoilPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(holofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(holofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(holofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(holofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(holofoilPrices.directLow), inline=True)
 
     reverseHolofoilPrices = prices.reverseHolofoil    
     if reverseHolofoilPrices:
         embed.add_field(name=' -- Reverse Holofoil Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(reverseHolofoilPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(reverseHolofoilPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(reverseHolofoilPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(reverseHolofoilPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(reverseHolofoilPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(reverseHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(reverseHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(reverseHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(reverseHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(reverseHolofoilPrices.directLow), inline=True)
 
     firstEditionNormalPrices = prices.firstEditionNormal    
     if firstEditionNormalPrices:
         embed.add_field(name=' -- First Edition Normal Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(firstEditionNormalPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(firstEditionNormalPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(firstEditionNormalPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(firstEditionNormalPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionNormalPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(firstEditionNormalPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(firstEditionNormalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(firstEditionNormalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(firstEditionNormalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(firstEditionNormalPrices.directLow), inline=True)
         
     firstEditionHolofoilPrices = prices.firstEditionHolofoil        
     if firstEditionHolofoilPrices:
         embed.add_field(name=' -- First Edition Holofoil Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(firstEditionHolofoilPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(firstEditionHolofoilPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(firstEditionHolofoilPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(firstEditionHolofoilPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionHolofoilPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(firstEditionHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(firstEditionHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(firstEditionHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(firstEditionHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(firstEditionHolofoilPrices.directLow), inline=True)
+    
+    return embed
+
+
+# Build an embed with pricing information, given a card (CARDMARKET)
+def cmprice_embed(card, card_set):
+    embed = None
+    prices = card.cardmarket.prices
+    updateDate = date.fromisoformat(card.cardmarket.updatedAt.replace('/', '-'))
+    
+    # Get the name of the card for the title
+    title = card.name
+    desc = "Prices provided by CardMarket. Last updated: %s" % updateDate.strftime('%B %-d, %Y')
+    
+    embed = discord.Embed(title=title, description=desc, url=card.cardmarket.url)
+    embed.set_thumbnail(url=card.images.small)
+    
+    embed.add_field(name="FROM", value="%s €" % prices.lowPrice, inline=True)
+    embed.add_field(name="TREND", value="%s €" % prices.trendPrice, inline=True)
+    embed.add_field(name="AVERAGE", value="%s €" % prices.averageSellPrice, inline=True)
+    
+    if prices.reverseHoloLow:
+        embed.add_field(name=" -- Reverse Holofoild Prices --", value="\u200b", inline=False)
+        embed.add_field(name="FROM", value="%s €" % prices.reverseHoloLow, inline=True)
+        embed.add_field(name="TREND", value="%s €" % prices.reverseHoloTrend, inline=True)
+        embed.add_field(name="AVERAGE", value="%s €" % prices.reverseHoloSell, inline=True)
     
     return embed
 
@@ -469,7 +495,7 @@ def text(name, card_set_text):
     return_str += "```\n"
     return return_str
 
-# Given the card name and set code, searches for the price of the card
+# Given the card name and set code, searches for the price of the card (TCGPLAYER)
 @lru_cache(maxsize=1024)
 def price(name, card_set_text):
     card = parse_card(name, card_set_text)
@@ -478,7 +504,18 @@ def price(name, card_set_text):
         return card
 
     card_set = Set.find(card.set.id)
-    return price_embed(card, card_set)
+    return tcgprice_embed(card, card_set)
+
+# Given the card name and set code, searches for the price of the card (CARDMARKET)
+@lru_cache(maxsize=1024)
+def cmprice(name, card_set_text):
+    card = parse_card(name, card_set_text_)
+    
+    if type(card) == str:
+        return card
+    
+    card_set = Set.find(card.set.id)
+    return cmprice_embed(card, card_set)
 
 class PokemonTCG(commands.Cog):
     def __init__(self, bot):
@@ -544,15 +581,29 @@ class PokemonTCG(commands.Cog):
         await self._smart_send(ctx.message.channel, message)
         
     @commands.command(pass_context=True)
-    async def price(self, ctx, set_text: str, *, name: str = None):
+    async def tcgplayer(self, ctx, set_text: str, *, name: str = None):
         """
         Displays the prices for the given card from the given set.
         Prices are provided by TCGPlayer. If you're unsure of the
         card, find it with [p]card first.
         Examples:
-            !price sm3-12
-            !price swsh4-130
-            !price swsh4-156
+            !tcgplayer sm3-12
+            !tcgplayer swsh4-130
+            !tcgplayer swsh4-156
         """
-        message = await self._run_in_thread(price, name, set_text)
+        message = await self._run_in_thread(tcgprice, name, set_text)
+        await self._smart_send(ctx.message.channel, message)
+        
+    @commands.command(pass_context=True)
+    async def cardmarket(self, ctx, set_text: str, *, name: str = None):
+        """
+        Displays the prices for the given card from the given set.
+        Prices are provided by CardMarket. If you're unsure of the
+        card, find it with [p]card first.
+        Examples:
+            !cardmarket sm4-24
+            !cardmarket swsh6-231
+            !cardmarket swsh3-155
+        """
+        message = await self._run_in_thread(cmprice, name, set_text)
         await self._smart_send(ctx.message.channel, message)

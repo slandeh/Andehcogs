@@ -509,7 +509,7 @@ def tcgprice(name, card_set_text):
 # Given the card name and set code, searches for the price of the card (CARDMARKET)
 @lru_cache(maxsize=1024)
 def cmprice(name, card_set_text):
-    card = parse_card(name, card_set_text_)
+    card = parse_card(name, card_set_text)
     
     if type(card) == str:
         return card

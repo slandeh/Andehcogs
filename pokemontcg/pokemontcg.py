@@ -237,7 +237,7 @@ def cmprice_embed(card, card_set):
     embed.add_field(name="AVERAGE", value="%s €" % prices.averageSellPrice, inline=True)
     
     if prices.reverseHoloLow:
-        embed.add_field(name=" -- Reverse Holofoild Prices --", value="\u200b", inline=False)
+        embed.add_field(name=" -- Reverse Holofoil Prices --", value="\u200b", inline=False)
         embed.add_field(name="FROM", value="%s €" % prices.reverseHoloLow, inline=True)
         embed.add_field(name="TREND", value="%s €" % prices.reverseHoloTrend, inline=True)
         embed.add_field(name="AVERAGE", value="%s €" % prices.reverseHoloSell, inline=True)

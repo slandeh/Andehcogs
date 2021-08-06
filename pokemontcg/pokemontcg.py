@@ -369,7 +369,7 @@ def parse_card(name, card_set):
             return "No results for card `%s`" % card_set
     else:
         # Search for the given card
-        cards = Card.where(q=f'name:{name} set.id={card_set}')
+        cards = Card.where(q=f'name:{name} set.id:{card_set}')
 
         if len(cards) == 0:
             return "No results found for '%s' in set `%s`" % (name, card_set)

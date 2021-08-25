@@ -113,7 +113,7 @@ def search(name):
     # If there is exactly one match, save time for the user and give the
     # !show output instead
     if len(cards) == 1:
-        return (show(cards[0].name, cards[0].set.id), 1)
+        return (show(cards[0].name, cards[0].id), 1)
 
     # Create the returned string
     return_str = "Matches for search '%s'\n" % name

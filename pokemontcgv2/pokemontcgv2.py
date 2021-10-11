@@ -113,12 +113,12 @@ def search(name):
     # If there is exactly one match, save time for the user and give the
     # !show output instead
     if len(cards) == 1:
-        return (show(cards[0].name, cards[0].set.id), 1)
+        return (show(cards[0].name, cards[0].id), 1)
 
     # Create the returned string
     return_str = "Matches for search '%s'\n" % name
     for card in cards:
-        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.series,
+        return_str += ("%s - %s %s/%s (`%s-%s`)\n" % (card.name, card.set.name,
                                                       card.number, card.set.printedTotal,
                                                       card.set.id, card.number))
 
@@ -140,26 +140,26 @@ def embed_create(card, card_set):
     # Set - legality - rarity
     text = "%s - %s/%s -- %s\n " % (card_set.name, card.number, card_set.printedTotal, card.rarity)
 
-    if card_set.legalities.standard == 'Legal':
+    if card.legalities.standard == 'Legal':
         text += "\u2705 (Standard) - "
-    elif card_set.legalities.standard == 'Banned':
+    elif card.legalities.standard == 'Banned':
         text += "\u274C (Standard) - "
-    if card_set.legalities.expanded == 'Legal':
+    if card.legalities.expanded == 'Legal':
         text += "\u2705 (Expanded) - "
-    elif card_set.legalities.expanded == 'Banned':
+    elif card.legalities.expanded == 'Banned':
         text += "\u274C (Expanded) - "
-    if card_set.legalities.unlimited == 'Legal':
-        text += "\u2705 (Legacy)"
-    elif card_set.legalities.unlimited == 'Banned':
-        text += "\u274C (Legacy)"
+    if card.legalities.unlimited == 'Legal':
+        text += "\u2705 (Unlimited)"
+    elif card.legalities.unlimited == 'Banned':
+        text += "\u274C (Unlimited)"
 
     embed.set_footer(text=text, icon_url=card_set.images.symbol)
 
     return embed
 
 
-# Build an embed with pricing information, given a card
-def price_embed(card, card_set):
+# Build an embed with pricing information, given a card (TCGPLAYER)
+def tcgprice_embed(card, card_set):
     embed = None
     prices = card.tcgplayer.prices
     updateDate = date.fromisoformat(card.tcgplayer.updatedAt.replace('/', '-'))
@@ -168,53 +168,79 @@ def price_embed(card, card_set):
     title = card.name
     desc = "Prices provided by TCGPlayer. Last updated: %s" % updateDate.strftime('%B %-d, %Y')
     
-    embed = discord.Embed(title=title, color=colour[card.types[0]], description=desc, url=card.tcgplayer.url)
+    embed = discord.Embed(title=title, description=desc, url=card.tcgplayer.url)
     embed.set_thumbnail(url=card.images.small)
     
     normalPrices = prices.normal
     if normalPrices:
         embed.add_field(name=' -- Normal Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(normalPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(normalPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(normalPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(normalPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(normalPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(normalPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(normalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(normalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(normalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(normalPrices.directLow), inline=True)
 
     holofoilPrices = prices.holofoil    
     if holofoilPrices:
         embed.add_field(name=' -- Holofoil Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(holofoilPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(holofoilPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(holofoilPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(holofoilPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(holofoilPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(holofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(holofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(holofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(holofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(holofoilPrices.directLow), inline=True)
 
     reverseHolofoilPrices = prices.reverseHolofoil    
     if reverseHolofoilPrices:
         embed.add_field(name=' -- Reverse Holofoil Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(reverseHolofoilPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(reverseHolofoilPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(reverseHolofoilPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(reverseHolofoilPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(reverseHolofoilPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(reverseHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(reverseHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(reverseHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(reverseHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(reverseHolofoilPrices.directLow), inline=True)
 
     firstEditionNormalPrices = prices.firstEditionNormal    
     if firstEditionNormalPrices:
         embed.add_field(name=' -- First Edition Normal Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(firstEditionNormalPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(firstEditionNormalPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(firstEditionNormalPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(firstEditionNormalPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionNormalPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(firstEditionNormalPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(firstEditionNormalPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(firstEditionNormalPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(firstEditionNormalPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(firstEditionNormalPrices.directLow), inline=True)
         
     firstEditionHolofoilPrices = prices.firstEditionHolofoil        
     if firstEditionHolofoilPrices:
         embed.add_field(name=' -- First Edition Holofoil Prices --', value='\u200b', inline=False)
-        embed.add_field(name="LOW", value=valueSearch(firstEditionHolofoilPrices.low), inline=True)
-        embed.add_field(name="MID", value=valueSearch(firstEditionHolofoilPrices.mid), inline=True)
-        embed.add_field(name="HIGH", value=valueSearch(firstEditionHolofoilPrices.high), inline=True)
-        embed.add_field(name="MARKET", value=valueSearch(firstEditionHolofoilPrices.market), inline=True)
-        embed.add_field(name="DIRECT LOW", value=valueSearch(firstEditionHolofoilPrices.directLow), inline=True)
+        embed.add_field(name="LOW", value="$%s" % valueSearch(firstEditionHolofoilPrices.low), inline=True)
+        embed.add_field(name="MID", value="$%s" % valueSearch(firstEditionHolofoilPrices.mid), inline=True)
+        embed.add_field(name="HIGH", value="$%s" % valueSearch(firstEditionHolofoilPrices.high), inline=True)
+        embed.add_field(name="MARKET", value="$%s" % valueSearch(firstEditionHolofoilPrices.market), inline=True)
+        embed.add_field(name="DIRECT LOW", value="$%s" % valueSearch(firstEditionHolofoilPrices.directLow), inline=True)
+    
+    return embed
+
+
+# Build an embed with pricing information, given a card (CARDMARKET)
+def cmprice_embed(card, card_set):
+    embed = None
+    prices = card.cardmarket.prices
+    updateDate = date.fromisoformat(card.cardmarket.updatedAt.replace('/', '-'))
+    
+    # Get the name of the card for the title
+    title = card.name
+    desc = "Prices provided by CardMarket. Last updated: %s" % updateDate.strftime('%B %-d, %Y')
+    
+    embed = discord.Embed(title=title, description=desc, url=card.cardmarket.url)
+    embed.set_thumbnail(url=card.images.small)
+    
+    embed.add_field(name="FROM", value="%s €" % prices.lowPrice, inline=True)
+    embed.add_field(name="TREND", value="%s €" % prices.trendPrice, inline=True)
+    embed.add_field(name="AVERAGE", value="%s €" % prices.averageSellPrice, inline=True)
+    
+    if prices.reverseHoloLow:
+        embed.add_field(name=" -- Reverse Holofoil Prices --", value="\u200b", inline=False)
+        embed.add_field(name="FROM", value="%s €" % prices.reverseHoloLow, inline=True)
+        embed.add_field(name="TREND", value="%s €" % prices.reverseHoloTrend, inline=True)
+        embed.add_field(name="AVERAGE", value="%s €" % prices.reverseHoloSell, inline=True)
     
     return embed
 
@@ -299,16 +325,16 @@ def pokemon_embed(card):
     else:
         desc = '\u200b'
 
-    embed.add_field(name=name, value=desc, inline=False)
+    embed.add_field(name=name or '\u200b', value=desc, inline=False)
 
     return embed
 
 
 # Construct an Embed object from a Trainer card and it's set
 def trainer_embed(card):
-    if card.subtypes == 'None':
+    if card.subtypes is None:
         desc = "%s" % (card.supertype)
-    else
+    else:
         desc = "%s - %s" % (card.supertype, card.subtypes[0])
     embed = discord.Embed(title=card.name, description=desc)
 
@@ -321,15 +347,16 @@ def trainer_embed(card):
 # Construct an Embed object from an Energy card and it's set
 def energy_embed(card):
     desc = "%s - %s" % (card.supertype, card.subtypes[0])
-    if card.subtypes[1] != 'None':
-        desc += "(%s)" % (card.subtypes[1])
+    if len(card.subtypes) > 1:
+        desc += " (%s)" % (card.subtypes[1])
     embed = discord.Embed(title=card.name, description=desc)
     
-    if card.rules != 'None':
+    if card.rules is not None:
         for text in card.rules:
             embed.add_field(name='\u200b', value=text)
     
     return embed
+
 
 # Get a card object from the passed name and set code
 def parse_card(name, card_set):
@@ -342,7 +369,7 @@ def parse_card(name, card_set):
             return "No results for card `%s`" % card_set
     else:
         # Search for the given card
-        cards = Card.where(name = name, setCode=card_set)
+        cards = Card.where(q=f'name:{name} set.id:{card_set}')
 
         if len(cards) == 0:
             return "No results found for '%s' in set `%s`" % (name, card_set)
@@ -452,34 +479,45 @@ def text(name, card_set_text):
 
     # Finally, get the set and legality info
     return_str += "\n\n%s - %s/%s" % (card_set.name, card.number, card_set.printedTotal)
-    if card_set.legalities.standard == 'Legal':
+    if card.legalities.standard == 'Legal':
         return_str += " \u2705 (Standard)"
-    elif card_set.legalities.standard == 'Banned':
+    elif card.legalities.standard == 'Banned':
         return_str += " \u274C (Standard)"
-    if card_set.legalities.expanded == 'Legal':
+    if card.legalities.expanded == 'Legal':
         return_str += " \u2705 (Expanded)"
-    elif card_set.legalities.expanded == 'Banned':
+    elif card.legalities.expanded == 'Banned':
         return_str += " \u274C (Expanded)"
-    if card_set.legalities.unlimited == 'Legal':
-        return_str += " \u2705 (Legacy)"
-    elif card_set.legalities.unlimited == 'Banned':
-        return_str += " \u274C (Legacy)"
+    if card.legalities.unlimited == 'Legal':
+        return_str += " \u2705 (Unlimited)"
+    elif card.legalities.unlimited == 'Banned':
+        return_str += " \u274C (Unlimited)"
 
     return_str += "```\n"
     return return_str
 
-# Given the card name and set code, searches for the price of the card
+# Given the card name and set code, searches for the price of the card (TCGPLAYER)
 @lru_cache(maxsize=1024)
-def price(name, card_set_text):
+def tcgprice(name, card_set_text):
     card = parse_card(name, card_set_text)
 
     if type(card) == str:
         return card
 
     card_set = Set.find(card.set.id)
-    return price_embed(card, card_set)
+    return tcgprice_embed(card, card_set)
 
-class PokemonTCGv2(commands.Cog):
+# Given the card name and set code, searches for the price of the card (CARDMARKET)
+@lru_cache(maxsize=1024)
+def cmprice(name, card_set_text):
+    card = parse_card(name, card_set_text)
+    
+    if type(card) == str:
+        return card
+    
+    card_set = Set.find(card.set.id)
+    return cmprice_embed(card, card_set)
+
+class PokemonTCG(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.executor = ThreadPoolExecutor()
@@ -543,15 +581,29 @@ class PokemonTCGv2(commands.Cog):
         await self._smart_send(ctx.message.channel, message)
         
     @commands.command(pass_context=True)
-    async def price(self, ctx, set_text: str, *, name: str = None):
+    async def tcgplayer(self, ctx, set_text: str, *, name: str = None):
         """
         Displays the prices for the given card from the given set.
         Prices are provided by TCGPlayer. If you're unsure of the
         card, find it with [p]card first.
         Examples:
-            !price sm3-12
-            !price swsh4-130
-            !price swsh4-156
+            !tcgplayer sm3-12
+            !tcgplayer swsh4-130
+            !tcgplayer swsh4-156
         """
-        message = await self._run_in_thread(price, name, set_text)
+        message = await self._run_in_thread(tcgprice, name, set_text)
+        await self._smart_send(ctx.message.channel, message)
+        
+    @commands.command(pass_context=True)
+    async def cardmarket(self, ctx, set_text: str, *, name: str = None):
+        """
+        Displays the prices for the given card from the given set.
+        Prices are provided by CardMarket. If you're unsure of the
+        card, find it with [p]card first.
+        Examples:
+            !cardmarket sm4-24
+            !cardmarket swsh6-231
+            !cardmarket swsh3-155
+        """
+        message = await self._run_in_thread(cmprice, name, set_text)
         await self._smart_send(ctx.message.channel, message)

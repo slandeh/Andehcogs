@@ -400,10 +400,10 @@ def parse_card(name, card_set):
                         "For example `[p]show %s %s-%s`" % (name, card_set, cards[0].number))
 
             card = cards[0]
-            return card
         else:
             return ("Set Abbreviation wasn't found. Double check and try again.")
-        
+   
+    return card    
 
 # Given a card name and set code, get an embed for that card
 @lru_cache(maxsize=1024)

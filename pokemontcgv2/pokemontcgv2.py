@@ -517,7 +517,7 @@ def cmprice(name, card_set_text):
     card_set = Set.find(card.set.id)
     return cmprice_embed(card, card_set)
 
-class PokemonTCG(commands.Cog):
+class PokemonTCGv2(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.executor = ThreadPoolExecutor()

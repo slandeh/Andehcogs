@@ -407,6 +407,10 @@ def parse_card(name, card_set):
     # get the card
     card = None
     if "-" in card_set:
+        card_part = card_set.split("-")
+        for set_code, setid in sets.items():
+            if set_code in card_set:
+                card_set = card_set.replace(card_part[0], setid)
         card = Card.find(card_set)
         if card is None:
             return "No results for card `%s`" % card_set

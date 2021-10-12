@@ -61,6 +61,49 @@ short_energy = {
     'Water'     : "[W]",
 }
 
+# Conversion for Set Codes to Set Names
+sets = {
+    'XY' : 'XY1',
+    'FLF' : 'XY2',
+    'FFI' : 'XY3',
+    'PHF' : 'XY4',
+    'PRC' : 'XY5',
+    'DCR' : 'DC1',
+    'ROS' : 'XY6',
+    'AOR' : 'XY7',
+    'BKT' : 'XY8',
+    'BKP' : 'XY9',
+    'GEN' : 'G1',
+    'FCO' : 'XY10',
+    'STS' : 'XY11',
+    'EVO' : 'XY12',
+    'SUM' : 'SM1',
+    'GRI' : 'SM2',
+    'BUS' : 'SM3',
+    'SHL' : 'SM35',
+    'CRI' : 'SM4',
+    'UPR' : 'SM5',
+    'FLI' : 'SM6',
+    'CES' : 'SM7',
+    'DRM' : 'SM75',
+    'LOT' : 'SM8',
+    'TEU' : 'SM9',
+    'UNB' : 'SM10',
+    'UNM' : 'SM11',
+    'HIF' : 'SM115',
+    'CEC' : 'SM12',
+    'SSH' : 'SWSH1',
+    'RCL' : 'SWSH2',
+    'DAA' : 'SWSH3',
+    'CHP' : 'SWSH35',
+    'VIV' : 'SWSH4',
+    'SHF' : 'SWSH45',
+    'BST' : 'SWSH5',
+    'CRE' : 'SWSH6',
+    'EVS' : 'SWSH7',
+    'CEL' : 'CEL25'
+}
+
 # Getting price values
 def valueSearch(value):
     if not value:
@@ -364,24 +407,36 @@ def parse_card(name, card_set):
     # get the card
     card = None
     if "-" in card_set:
+        card_part = card_set.split("-")
+        for set_code, setid in sets.items():
+            if set_code in card_set:
+                card_set = card_set.replace(card_part[0], setid.lower())
         card = Card.find(card_set)
         if card is None:
             return "No results for card `%s`" % card_set
     else:
-        # Search for the given card
-        cards = Card.where(q=f'name:{name} set.id:{card_set}')
+        # Check if a Set Abbreviation was used instead
+        nums = set('0123456789')
+        for set_code, setid in sets.items():
+            card_set = card_set.replace(set_code, setid)
+        
+        # Verify Set Abbreviation was replaced
+        if any((n in nums) for n in card_set):
+            # Search for the given card
+            cards = Card.where(q=f'name:{name} set.id:{card_set}')
 
-        if len(cards) == 0:
-            return "No results found for '%s' in set `%s`" % (name, card_set)
+            if len(cards) == 0:
+                return "No results found for '%s' in set `%s`" % (name, card_set)
 
-        if len(cards) > 1:
-            return ("Too many results. Try specifying the card number too. "
-                    "For example `[p]show %s %s-%s`" % (name, card_set, cards[0].number))
+            if len(cards) > 1:
+                return ("Too many results. Try specifying the card number too. "
+                        "For example `[p]show %s %s-%s`" % (name, card_set, cards[0].number))
 
-        card = cards[0]
-
+            card = cards[0]
+        else:
+            return ("Set Abbreviation wasn't found. Double check and try again.")
+   
     return card
-
 
 # Given a card name and set code, get an embed for that card
 @lru_cache(maxsize=1024)

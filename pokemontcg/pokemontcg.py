@@ -63,7 +63,6 @@ short_energy = {
 
 # Conversion for Set Codes to Set Names
 sets = {
-    'XY' : 'XY1',
     'FLF' : 'XY2',
     'FFI' : 'XY3',
     'PHF' : 'XY4',

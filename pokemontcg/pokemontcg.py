@@ -100,7 +100,8 @@ sets = {
     'BST' : 'SWSH5',
     'CRE' : 'SWSH6',
     'EVS' : 'SWSH7',
-    'CEL' : 'CEL25'
+    'CEL' : 'CEL25',
+    'FST' : 'SWSH8'
 }
 
 # Getting price values

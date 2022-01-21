@@ -9,6 +9,9 @@ from redbot.core.utils.chat_formatting import pagify
 # Maximum number of rulings before giving up on creating an embed.
 MAX_RULINGS = 3
 
+# Compendium Icon
+COMPENDIUM_ICO = 'https://compendium.pokegym.net/wp-content/uploads/2021/08/cropped-cpdm_ball-32x32.png'
+
 # Variables for making Compendium Requests
 url = "https://compendium.pokegym.net/wp-json/relevanssi/v1/search?keyword="
 ruletype = "&type=ruling"
@@ -42,7 +45,6 @@ def compsearch(text):
 
     # Set some embed variabled
     title = text.title()
-    compendium_ico = 'https://compendium.pokegym.net/wp-content/uploads/2021/08/cropped-cpdm_ball-32x32.png'
     
     # Let's create a Discord Embed!
     if len(r) == 1:
@@ -56,7 +58,7 @@ def compsearch(text):
         embed.add_field(name="Question", value=question, inline=True)
         embed.add_field(name="Answer", value=answer, inline=True)
 
-        embed.set_footer(text=source, icon_url=compendium_ico)
+        embed.set_footer(text=source, icon_url=COMPENDIUM_ICO)
 
         return (embed, len(r))
     
@@ -70,7 +72,7 @@ def compsearch(text):
             embed.add_field(name="Question", value=question, inline=True)
             embed.add_field(name="Answer", value=answer, inline=True)
 
-        embed.set_footer(text="Compendium Team", icon_url=compendium_ico)
+        embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
 
         return (embed, len(r))
 

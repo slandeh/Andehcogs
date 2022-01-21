@@ -1,0 +1,10 @@
+{
+    "author" : ["Andeh#0001"],
+    "install_msg" : "You're about to install this.",
+    "name" : "Compendium",
+    "short" : "A Compendium lookup tool.",
+    "description" : "Gives rulings for Pokemon TCG.",
+    "tags" : ["pokemon", "cards", "tcg"],
+    "requirements" : ["requests", "json"],
+    "hidden" : false
+}

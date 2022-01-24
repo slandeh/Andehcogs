@@ -60,13 +60,12 @@ def compsearch(text):
         return (embed, len(r))
     
     elif len(r) > 1:
-        url = finalurl
-
+        url = f'https://compendium.pokegym.net/?s={urltext}'
+        embed = discord.Embed(title=title, url=url)
+        
         for rule in r:
             question = rule['meta']['question']
             answer = rule['meta']['ruling'] + ' (' + rule['meta']['source'][0] + ')'
-            
-            embed = discord.Embed(title=title, url=url)
 
             embed.add_field(name="Question", value=question, inline=False)
             embed.add_field(name="Answer", value=answer, inline=False)

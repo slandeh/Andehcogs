@@ -15,7 +15,7 @@ COMPENDIUM_ICO = 'https://compendium.pokegym.net/wp-content/uploads/2021/08/crop
 # Variables for making Compendium Requests
 url = "https://compendium.pokegym.net/wp-json/relevanssi/v1/search?keyword="
 ruletype = "&type=ruling"
-headers = {"Authorization": "Basic Um90b21QaG9uZTpYc2xOIHBXa1YgTFVnciAxdHNGIHBkM08gTHNvMw==", "User-Agent": "PostmanRuntime/7.28.4"}
+headers = {"Authorization": "Basic Um90b21QaG9uZTpYc2xOIHBXa1YgTFVnciAxdHNGIHBkM08gTHNvMw==", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"}
 payload = {}
 
 # Given string "searchtext", search the compendium for rulings.
@@ -25,13 +25,10 @@ def compsearch(text):
         return ("", 0)
     
     # Convert strings to appropriate url strings
-    if " " in text:
-        finaltext = text.replace(" ", "+")
-    else:
-        finaltext = text
+    text = text.replace(" ","+")
 
     # Create the request URL
-    finalurl = url + finaltext + ruletype
+    finalurl = f"https://compendium.pokegym.net/wp-json/relevanssi/v1/search?keyword={text}&type=ruling"
 
     response = requests.get(finalurl, headers=headers)
 
@@ -68,6 +65,8 @@ def compsearch(text):
         for rule in r:
             question = r[rule]['meta']['question']
             answer = r[rule]['meta']['answer'] + ' (' + r[rule]['meta']['source'][0] + ')'
+            
+            embed = discord.Embed(title=title, url=url)
 
             embed.add_field(name="Question", value=question, inline=True)
             embed.add_field(name="Answer", value=answer, inline=True)

@@ -35,7 +35,7 @@ def compsearch(text):
     r = json.loads(response.text)
 
     # Validate response is not empty
-    if r["data"] is None:
+    if response.status_code == 500:
         return ("", 0)
     elif len(r) > MAX_RULINGS:
         return ("", len(r))

@@ -96,7 +96,7 @@ class Compendium(commands.Cog):
                 await destination.send(page)
 
     @commands.command(pass_context=True)
-    async def compendium(self, ctx, *, card_name: str):
+    async def compendium(self, ctx, *, searchtext: str):
         """
         Returns rulings related to the search terms.
         Usage:

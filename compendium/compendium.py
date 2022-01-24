@@ -68,8 +68,8 @@ def compsearch(text):
             
             embed = discord.Embed(title=title, url=url)
 
-            embed.add_field(name="Question", value=question, inline=True)
-            embed.add_field(name="Answer", value=answer, inline=True)
+            embed.add_field(name="Question", value=question, inline=False)
+            embed.add_field(name="Answer", value=answer, inline=False)
 
         embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
 

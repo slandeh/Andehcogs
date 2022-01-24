@@ -5,6 +5,6 @@
     "short" : "A Compendium lookup tool.",
     "description" : "Gives rulings for Pokemon TCG.",
     "tags" : ["pokemon", "cards", "tcg"],
-    "requirements" : ["requests", "json"],
+    "requirements" : ["requests"],
     "hidden" : false
 }

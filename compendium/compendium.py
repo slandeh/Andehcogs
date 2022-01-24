@@ -63,8 +63,8 @@ def compsearch(text):
         url = finalurl
 
         for rule in r:
-            question = r[rule]['meta']['question']
-            answer = r[rule]['meta']['answer'] + ' (' + r[rule]['meta']['source'][0] + ')'
+            question = rule['meta']['question']
+            answer = rule['meta']['ruling'] + ' (' + rule['meta']['source'][0] + ')'
             
             embed = discord.Embed(title=title, url=url)
 

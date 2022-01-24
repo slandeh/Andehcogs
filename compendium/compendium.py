@@ -25,10 +25,10 @@ def compsearch(text):
         return ("", 0)
     
     # Convert strings to appropriate url strings
-    text = text.replace(" ","+")
+    urltext = text.replace(" ","+")
 
     # Create the request URL
-    finalurl = f"https://compendium.pokegym.net/wp-json/relevanssi/v1/search?keyword={text}&type=ruling"
+    finalurl = f"https://compendium.pokegym.net/wp-json/relevanssi/v1/search?keyword={urltext}&type=ruling"
 
     response = requests.get(finalurl, headers=headers)
 
@@ -48,12 +48,12 @@ def compsearch(text):
         url = r[0]['link']
         question = r[0]['meta']['question']
         answer = r[0]['meta']['ruling']
-        source = r[0]['meta']['source']
+        source = r[0]['meta']['source'][0]
 
         embed = discord.Embed(title=title, url=url)
 
-        embed.add_field(name="Question", value=question, inline=True)
-        embed.add_field(name="Answer", value=answer, inline=True)
+        embed.add_field(name="Question", value=question, inline=False)
+        embed.add_field(name="Answer", value=answer, inline=False)
 
         embed.set_footer(text=source, icon_url=COMPENDIUM_ICO)
 

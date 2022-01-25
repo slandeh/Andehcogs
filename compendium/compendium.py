@@ -52,8 +52,10 @@ def compsearch(text):
 
         embed = discord.Embed(title=title, url=url, description="If you don't find an answer below, check/post in Ask the Rules Team forum.")
 
-        embed.add_field(name="Question", value=question, inline=False)
-        embed.add_field(name="Answer", value=answer, inline=False)
+        if bool(question) is True:
+            embed.add_field(name="Question", value=question, inline=False)
+            
+        embed.add_field(name="Ruling", value=answer, inline=False)
 
         embed.set_footer(text=source, icon_url=COMPENDIUM_ICO)
 
@@ -67,8 +69,10 @@ def compsearch(text):
             question = rule['meta']['question']
             answer = rule['meta']['ruling'] + ' (' + rule['meta']['source'][0] + ')'
 
-            embed.add_field(name="Question", value=question, inline=False)
-            embed.add_field(name="Answer", value=answer, inline=False)
+            if bool(question) is True:
+                embed.add_field(name="Question", value=question, inline=False)
+                
+            embed.add_field(name="Ruling", value=answer, inline=False)
         
         embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
 

@@ -54,6 +54,8 @@ def compsearch(text):
 
         embed.add_field(name="Question", value=question, inline=False)
         embed.add_field(name="Answer", value=answer, inline=False)
+        
+        embed.add_field(value="Also check/post in Ask the Rules Team forum.", inline=False)
 
         embed.set_footer(text=source, icon_url=COMPENDIUM_ICO)
 
@@ -70,6 +72,8 @@ def compsearch(text):
             embed.add_field(name="Question", value=question, inline=False)
             embed.add_field(name="Answer", value=answer, inline=False)
 
+        embed.add_field(value="Also check/post in Ask the Rules Team forum.", inline=False)
+        
         embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
 
         return (embed, len(r))
@@ -105,8 +109,12 @@ class Compendium(commands.Cog):
         (message, results) = await self._run_in_thread(compsearch, searchtext)
 
         if results > MAX_RULINGS:
-            await self._smart_send(ctx.message.channel, "Results list is too long, try using more terms")
+            await self._smart_send(ctx.message.channel, "Results list is too long, try using more terms.")
         elif results == 0:
-            await self._smart_send(ctx.message.channel, "No results were found, check the terms you're searching.")
+            await self._smart_send(ctx.message.channel, "No results were found, check the terms you're searching. If you feel there should be a ruling here, feel free to ask Team Compendium in the forums: https://pokegym.net/community/index.php?forums/ask-the-rules-team.25/")
         else:
             await self._smart_send(ctx.message.channel, message)
+
+    @commands.command(pass_context=True)
+    async def about(self, ctx, *):
+        await self._smart_send(ctx.message.channel, "Use !compendium to search for rulings.\n\nAsk more questions and read more answers in the Ask the Rules Team forum: https://pokegym.net/community/index.php?forums/ask-the-rules-team.25/")

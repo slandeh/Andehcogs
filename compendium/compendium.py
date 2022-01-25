@@ -50,7 +50,7 @@ def compsearch(text):
         answer = r[0]['meta']['ruling']
         source = r[0]['meta']['source'][0]
 
-        embed = discord.Embed(title=title, url=url, description="Also check/post in Ask the Rules Team forum.")
+        embed = discord.Embed(title=title, url=url, description="If you don't find an answer below, check/post in Ask the Rules Team forum.")
 
         embed.add_field(name="Question", value=question, inline=False)
         embed.add_field(name="Answer", value=answer, inline=False)
@@ -61,7 +61,7 @@ def compsearch(text):
     
     elif len(r) > 1:
         url = f'https://compendium.pokegym.net/?s={urltext}'
-        embed = discord.Embed(title=title, url=url, description="Also check/post in Ask the Rules Team forum.")
+        embed = discord.Embed(title=title, url=url, description="If you don't find an answer below, check/post in Ask the Rules Team forum.")
         
         for rule in r:
             question = rule['meta']['question']

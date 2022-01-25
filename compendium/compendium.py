@@ -116,5 +116,5 @@ class Compendium(commands.Cog):
             await self._smart_send(ctx.message.channel, message)
 
     @commands.command(pass_context=True)
-    async def about(self, ctx, *):
+    async def about(self, ctx):
         await self._smart_send(ctx.message.channel, "Use !compendium to search for rulings.\n\nAsk more questions and read more answers in the Ask the Rules Team forum: https://pokegym.net/community/index.php?forums/ask-the-rules-team.25/")

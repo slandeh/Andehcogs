@@ -109,6 +109,9 @@ def rulefind(num):
     
     r = json.loads(response.text)
     
+    if response.status_code == 404:
+        return "No results were found! Please check the ID again."
+    
     question = r['meta']['question']
     answer = r['meta']['ruling']
     url = f"https://compendium.pokegym.net/ruling/{num}"

@@ -95,7 +95,7 @@ def compsearch(text):
 
 def rulefind(num):
     embed = None
-    if num = "":
+    if num == "":
         return ("")
     
     try:

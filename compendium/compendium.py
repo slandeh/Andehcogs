@@ -93,6 +93,40 @@ def compsearch(text):
         return (embed, len(r))
 
 
+def rulefind(num):
+    embed = None
+    if num = "":
+        return ("")
+    
+    try:
+        int(num)
+    except ValueError:
+        return "That isn't a valid value! Please use a Ruling ID!"
+    
+    finalurl = f"https://compendium.pokegym.net/wp-json/wp/v2/ruling/{num}"
+    
+    response = requests.get(finalurl, headers=headers)
+    
+    r = json.loads(response.text)
+    
+    question = r['meta']['question']
+    answer = r['meta']['ruling']
+    url = f"https://compendium.pokegym.net/ruling/{num}"
+    source = r['meta']['source'][0]
+    
+    title = "Pokémon Rulings Compendium"
+    
+    embed = discord.Embed(title=title, url=url)
+    
+    if bool(question) is True:
+        embed.add_field(name="Question", value=question, inline=False)
+        
+    embed.add_field(name="Answer", value=answer, inline=False)
+    
+    embed.set_footer(text=source, icon_url=COMPENDIUM_ICO)
+    
+    return embed
+
 
 class Compendium(commands.Cog):
     def __init__(self, bot):
@@ -122,6 +156,17 @@ class Compendium(commands.Cog):
         """
         (message, results) = await self._run_in_thread(compsearch, searchtext)
 
+        await self._smart_send(ctx.message.channel, message)
+        
+    @commands.command(pass_context=True)
+    async def ruling(self, ctx, *, rulingnum: str):
+        """
+        Returns the specifed ruling number.
+        Usage:
+            !ruling 40
+        """
+        message = await self._run_in_thread(rulefind, rulingnum)
+        
         await self._smart_send(ctx.message.channel, message)
 
     @commands.command(pass_context=True)

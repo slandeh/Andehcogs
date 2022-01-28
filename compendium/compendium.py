@@ -38,7 +38,7 @@ def compsearch(text):
     if response.status_code == 500:
         return ("", 0)
     elif len(r) > MAX_RULINGS:
-        return ("", len(r))
+        return (f"Results were too long to display. You can view your results here: {finalurl}, or try using more specific terms.", len(r))
 
     # Set some embed variabled
     title = text.title()
@@ -109,7 +109,7 @@ class Compendium(commands.Cog):
         (message, results) = await self._run_in_thread(compsearch, searchtext)
 
         if results > MAX_RULINGS:
-            await self._smart_send(ctx.message.channel, "Results list is too long, try using more terms.")
+            await self._smart_send(ctx.message.channel, message)
         elif results == 0:
             await self._smart_send(ctx.message.channel, "No results were found, check the terms you're searching. If you feel there should be a ruling here, feel free to ask Team Compendium in the forums: https://pokegym.net/community/index.php?forums/ask-the-rules-team.25/")
         else:

@@ -33,15 +33,29 @@ def compsearch(text):
     response = requests.get(finalurl, headers=headers)
 
     r = json.loads(response.text)
+    
+    # Set some embed variabled
+    title = text.title()
 
     # Validate response is not empty
     if response.status_code == 500:
         return ("", 0)
     elif len(r) > MAX_RULINGS:
-        return (f"Results were too long to display. You can view your results here: {finalurl}, or try using more specific terms.", len(r))
+        url = f'https://compendium.pokegym.net/?s={urltext}'
+        embed = discord.Embed(title=title, url=url, description="Too many results to display! Top 3 hits listed below. Use the title to view the full list.\nIf you don't find an answer below, check/post in Ask the Rules Team forum.")
+        
+        for rule in r[:3]:
+            question = rule['meta']['question']
+            answer = rule['meta']['ruling'] + ' (' + rule['meta']['source'][0] + ')'
 
-    # Set some embed variabled
-    title = text.title()
+            if bool(question) is True:
+                embed.add_field(name="Question", value=question, inline=False)
+                
+            embed.add_field(name="Ruling", value=answer, inline=False)
+        
+        embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
+
+        return (embed, len(r))
     
     # Let's create a Discord Embed!
     if len(r) == 1:
@@ -77,6 +91,9 @@ def compsearch(text):
         embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
 
         return (embed, len(r))
+    
+    elif len(r) == 0:
+        return ("No results were found, check the terms you're searching. If you feel there should be a ruling here, feel free to ask Team Compendium in the forums: https://pokegym.net/community/index.php?forums/ask-the-rules-team.25/", 0)
 
 
 
@@ -108,12 +125,7 @@ class Compendium(commands.Cog):
         """
         (message, results) = await self._run_in_thread(compsearch, searchtext)
 
-        if results > MAX_RULINGS:
-            await self._smart_send(ctx.message.channel, message)
-        elif results == 0:
-            await self._smart_send(ctx.message.channel, "No results were found, check the terms you're searching. If you feel there should be a ruling here, feel free to ask Team Compendium in the forums: https://pokegym.net/community/index.php?forums/ask-the-rules-team.25/")
-        else:
-            await self._smart_send(ctx.message.channel, message)
+        await self._smart_send(ctx.message.channel, message)
 
     @commands.command(pass_context=True)
     async def about(self, ctx):

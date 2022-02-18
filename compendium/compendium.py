@@ -53,7 +53,7 @@ def compsearch(text):
                 
             embed.add_field(name="Ruling", value=answer, inline=False)
         
-        embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
+        embed.set_footer(text="Team Compendium", icon_url=COMPENDIUM_ICO)
 
         return (embed, len(r))
     
@@ -88,7 +88,7 @@ def compsearch(text):
                 
             embed.add_field(name="Ruling", value=answer, inline=False)
         
-        embed.set_footer(text="Compendium Team", icon_url=COMPENDIUM_ICO)
+        embed.set_footer(text="Team Compendium", icon_url=COMPENDIUM_ICO)
 
         return (embed, len(r))
 

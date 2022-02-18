@@ -45,8 +45,8 @@ def compsearch(text):
         embed = discord.Embed(title=title, url=url, description="Too many results to display! Top 3 hits listed below. Use the title to view the full list.\n\nIf you don't find an answer below, check/post in Ask the Rules Team forum.")
         
         for rule in r[:3]:
-            question = rule['meta']['question']
-            answer = rule['meta']['ruling'] + ' (' + rule['meta']['source'][0] + ')'
+            question = rule['meta']['question'].replace("*", "\*")
+            answer = rule['meta']['ruling'].replace("*", "\*") + ' (' + rule['meta']['source'][0].replace("*", "\*") + ')'
 
             if bool(question) is True:
                 embed.add_field(name="Question", value=question, inline=False)
@@ -60,8 +60,8 @@ def compsearch(text):
     # Let's create a Discord Embed!
     if len(r) == 1:
         url = r[0]['link']
-        question = r[0]['meta']['question']
-        answer = r[0]['meta']['ruling']
+        question = r[0]['meta']['question'].replace("*", "\*")
+        answer = r[0]['meta']['ruling'].replace("*", "\*")
         source = r[0]['meta']['source'][0]
 
         embed = discord.Embed(title=title, url=url, description="If you don't find an answer below, check/post in Ask the Rules Team forum.")
@@ -80,8 +80,8 @@ def compsearch(text):
         embed = discord.Embed(title=title, url=url, description="If you don't find an answer below, check/post in Ask the Rules Team forum.")
         
         for rule in r:
-            question = rule['meta']['question']
-            answer = rule['meta']['ruling'] + ' (' + rule['meta']['source'][0] + ')'
+            question = rule['meta']['question'].replace("*", "\*")
+            answer = rule['meta']['ruling'].replace("*", "\*") + ' (' + rule['meta']['source'][0].replace("*", "\*") + ')'
 
             if bool(question) is True:
                 embed.add_field(name="Question", value=question, inline=False)
@@ -112,8 +112,8 @@ def rulefind(num):
     if response.status_code == 404:
         return "No results were found! Please check the ID again."
     
-    question = r['meta']['question']
-    answer = r['meta']['ruling']
+    question = r['meta']['question'].replace("*", "\*")
+    answer = r['meta']['ruling'].replace("*", "\*")
     url = f"https://compendium.pokegym.net/ruling/{num}"
     source = r['meta']['source'][0]
     

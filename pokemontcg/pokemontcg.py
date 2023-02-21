@@ -104,7 +104,10 @@ sets = {
     'FST' : 'SWSH8',
     'BRS' : 'SWSH9',
     'ASR' : 'SWSH10',
-    'LOR' : 'SWSH11'
+    'PGO' : 'PGO',
+    'LOR' : 'SWSH11',
+    'SIT' : 'SWSH12',
+    'CRZ' : 'SWSH12pt5'
 }
 
 # Getting price values

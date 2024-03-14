@@ -100,7 +100,7 @@ class Leveler(commands.Cog):
     async def get_avatar(self, user):
         try:
             res = BytesIO()
-            await user.avatar_url_as(format="png", size=1024).save(res, seek_begin=True)
+            await user.avatar.replace(format="png", size=1024).save(res, seek_begin=True)
             return res
         except:
             async with self._session.get(user.avatar_url_as(format="png", size=1024)) as r:

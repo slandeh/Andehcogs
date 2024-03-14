@@ -1,4 +1,4 @@
 from .pokemontcg import PokemonTCG
 
-def setup(bot):
-  bot.add_cog(PokemonTCG(bot))
+async def setup(bot):
+  await bot.add_cog(PokemonTCG(bot))

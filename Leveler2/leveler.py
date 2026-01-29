@@ -194,9 +194,9 @@ class Leveler(commands.Cog):
 
         draw.text((154, 316), f"{lprc}%", fill=usercolor, font=font1)
         draw.text((100, 360), (prog_str + f" {xp}/{nxp}"), fill=usercolor, font=font1)
-        draw.text(((font3.getsize(lvl_str)[0] + 20), 180), f"{lvl}", fill=usercolor, font=font3)
-        draw.text(((font3.getsize(ldb_str)[0] + 20), 220), f"{ldb}", fill=usercolor, font=font3)
-        draw.text(((font3.getsize(rank_str)[0] + 20), 260), f"{elo}", fill=usercolor, font=font3)
+        draw.text(((font3.getlength(lvl_str) + 20), 180), f"{lvl}", fill=usercolor, font=font3)
+        draw.text(((font3.getlength(ldb_str) + 20), 220), f"{ldb}", fill=usercolor, font=font3)
+        draw.text(((font3.getlength(rank_str) + 20), 260), f"{elo}", fill=usercolor, font=font3)
 
         draw.text((162, 14), f"{nick}", fill=usercolor, font=font2)
         draw.text((162, 40), f"{user.name}#{user.discriminator}", fill=usercolor, font=font1)
@@ -209,7 +209,8 @@ class Leveler(commands.Cog):
                 draw.text((margin, offset), f"{line}...", fill=usercolor, font=font1)
                 break
             draw.text((margin, offset), f"{line}", fill=usercolor, font=font1)
-            offset += font1.getsize(line)[1]
+            bbox = font1.getbbox(line)
+            offset += bbox[3] - bbox[1]
         temp = BytesIO()
         img.save(temp, format="PNG")
         temp.name = "profile.png"
@@ -654,4 +655,3 @@ class Leveler(commands.Cog):
         await ctx.send(
             _("Levelup announce is now {}.").format(_("enabled") if status else _("disabled"))
         )
-

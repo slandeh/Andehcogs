@@ -189,7 +189,7 @@ class Leveler(commands.Cog):
         draw.text((10, 220), ldb_str, fill="white", font=font3)
         draw.text((10, 260), rank_str, fill="white", font=font3)
         nick = user.display_name
-        if font2.getlength(nick)[0] > 150:
+        if font2.getlength(nick) > 150:
             nick = nick[:15] + "..."
 
         draw.text((154, 316), f"{lprc}%", fill=usercolor, font=font1)
@@ -654,3 +654,4 @@ class Leveler(commands.Cog):
         await ctx.send(
             _("Levelup announce is now {}.").format(_("enabled") if status else _("disabled"))
         )
+
